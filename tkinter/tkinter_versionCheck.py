@@ -263,7 +263,7 @@ def GDSM():
         # ZIP 파일 목록 출력
         # print("Critical = " + zip_files[0])
         zip_split = str(zip_files[0]).split("-")
-        split_str_new = str(zip_files[0]).strip(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
+        split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
         split_str_new_list.append(split_str_new)
         label=Label(frame, text="Critical = " + zip_files[0]).pack()
         
@@ -310,14 +310,14 @@ def GDSM():
                 # print("Diagnosis = " + zip_files[i])
                 label=Label(frame, text="Diagnosis = " + zip_files[i]).pack()
                 zip_split = zip_files[i].split("-")
-                split_str_new = str(zip_files[i]).strip(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
+                split_str_new = str(zip_files[i]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
                 split_str_new_list.append(split_str_new)
 
         elif len(zip_files) == 1:
             # print("Diagnosis = " + zip_files[0])
             label=Label(frame, text="Diagnosis = " + zip_files[0]).pack()
             zip_split = zip_files[0].split("-")
-            split_str_new = str(zip_files[0]).strip(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
+            split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
             split_str_new_list.append(split_str_new)
         
         
@@ -366,14 +366,14 @@ def GDSM():
                 # print("Diagnosis_CV = " + zip_files[i])
                 label=Label(frame, text="Diagnosis_CV = " + zip_files[i]).pack()
                 zip_split = zip_files[i].split("-")
-                split_str_new = str(zip_files[i]).strip(zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
+                split_str_new = str(zip_files[i]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
                 split_str_new_list.append(split_str_new)
 
         elif len(zip_files) == 1:
             # print("Diagnosis_CV = " + zip_files[0])
             label=Label(frame, text="Diagnosis_CV = " + zip_files[0]).pack()
             zip_split = zip_files[0].split("-")
-            split_str_new = str(zip_files[0]).strip(zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
+            split_str_new = str(zip_files[0]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
             split_str_new_list.append(split_str_new)
         
         # 파일 열기
@@ -418,7 +418,7 @@ def GDSM():
         # print("ECU = " + zip_files[0])
         label=Label(frame, text="ECU = " + zip_files[0]).pack()
         zip_split = str(zip_files[0]).split("-")
-        split_str_new = str(zip_files[0]).strip(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
+        split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
         split_str_new_list.append(split_str_new)
         
         
@@ -464,7 +464,7 @@ def GDSM():
         # print("ECU_CV = " + zip_files[0])
         label=Label(frame, text="ECU_CV = " + zip_files[0]).pack()
         zip_split = zip_files[0].split("-")
-        split_str_new = str(zip_files[0]).strip(str(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1]))
+        split_str_new = str(zip_files[0]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
         split_str_new_list.append(split_str_new)
         
 
@@ -510,7 +510,7 @@ def GDSM():
         # print("System = " + zip_files[0])
         label=Label(frame, text="System = " + zip_files[0]).pack()
         zip_split = zip_files[0].split("-")
-        split_str_new = str(zip_files[0]).strip(str(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1]))
+        split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
         split_str_new_list.append(split_str_new)
 
         # 파일 열기
@@ -539,7 +539,10 @@ def GDSM():
     
     return
 
-def Gscan(file_path):
+def Gscan():
+
+    file_path = entry.get()
+
     # 변수 선언
     App = r"\application"
     App_txt = r"\application_version.txt"
@@ -556,7 +559,6 @@ def Gscan(file_path):
     system = "\system"
     sys_txt = "\system_version.txt"
 
-    print("======================================")
 
     # application-----------------------------------
 
@@ -565,16 +567,15 @@ def Gscan(file_path):
         # 폴더명 추출
         for item in os.listdir(file_path+App):
             sub_folder = os.path.join(file_path+App, item) # 폴더경로 + 폴더명
-            sub_folder2 = os.path.join(item) # 폴더명만
             if os.path.isdir(sub_folder):
-                print("application = " + sub_folder2)
+                # print("application = " + item)
+                label=Label(frame, text="Application = " + item).pack()
 
         # 파일 열기
         with open(file_path+App+App_txt, "r", encoding="utf-8") as file:
             file_content = file.read()
-            print("Version_txt = " + file_content)
-
-        print("======================================")
+            # print("application_version_txt = " + file_content)
+            label=Label(frame, text="Version_txt = " + file_content).pack()
 
     else:
         pass
@@ -592,14 +593,14 @@ def Gscan(file_path):
                     zip_files.append(os.path.join(file))
 
         # ZIP 파일 목록 출력
-        print("critical = " + zip_files[0])
+        # print("critical = " + zip_files[0])
+        label=Label(frame, text="critical = " + zip_files[0]).pack()
         
         # 파일 열기
         with open(file_path+critical+critical_txt, "r", encoding="utf-8") as file:
             file_content = file.read()
-        print("Version_txt = " + file_content)
-        
-        print("======================================")
+        # print("Version_txt = " + file_content)
+        label=Label(frame, text="Version_txt = " + file_content).pack()
 
     else:
         pass
@@ -617,14 +618,14 @@ def Gscan(file_path):
                     zip_files.append(os.path.join(file))
 
         # ZIP 파일 목록 출력
-        print("diagnosis = " + zip_files[0])
+        # print("diagnosis = " + zip_files[0])
+        label=Label(frame, text="diagnosis = " + zip_files[0]).pack()
         
         # 파일 열기
         with open(file_path+diagnosis+diagnosis_txt, "r", encoding="utf-8") as file:
             file_content = file.read()
-        print("Version_txt = " + file_content)
-        
-        print("======================================")
+        # print("diagnosis_version_txt = " + file_content)
+        label=Label(frame, text="diagnosis_version_txt = " + file_content).pack()
 
     else:
         pass
@@ -642,14 +643,14 @@ def Gscan(file_path):
                     zip_files.append(os.path.join(file))
 
         # ZIP 파일 목록 출력
-        print("diagnosis_cv = " + zip_files[0])
+        # print("diagnosis_cv = " + zip_files[0])
+        label=Label(frame, text="diagnosis_cv = " + zip_files[0]).pack()
         
         # 파일 열기
         with open(file_path+diagnosis_cv+diagnosis_cv_txt, "r", encoding="utf-8") as file:
             file_content = file.read()
         print("Version_txt = " + file_content)
-        
-        print("======================================")
+        label=Label(frame, text="Version_txt = " + file_content).pack()
 
     else:
         pass
@@ -667,14 +668,14 @@ def Gscan(file_path):
                     zip_files.append(os.path.join(file))
 
         # ZIP 파일 목록 출력
-        print("diagnosis_im = " + zip_files[0])
+        # print("diagnosis_im = " + zip_files[0])
+        label=Label(frame, text="diagnosis_im = " + zip_files[0]).pack()
         
         # 파일 열기
         with open(file_path+diagnosis_im+diagnosis_im_txt, "r", encoding="utf-8") as file:
             file_content = file.read()
-        print("Version_txt = " + file_content)
-        
-        print("======================================")
+        # print("Version_txt = " + file_content)
+        label=Label(frame, text="Version_txt = " + file_content).pack()
 
     else:
         pass
@@ -692,21 +693,21 @@ def Gscan(file_path):
                     zip_files.append(os.path.join(file))
 
         # ZIP 파일 목록 출력
-        print("os = " + zip_files[0])
+        # print("os = " + zip_files[0])
+        label=Label(frame, text="os = " + zip_files[0]).pack()
         
         # 파일 열기
         with open(file_path+gscan_os+gscan_os_txt, "r", encoding="utf-8") as file:
             file_content = file.read()
-        print("os_txt = " + file_content)
+        # print("os_version_txt = " + file_content)
+        label=Label(frame, text="Version_txt = " + file_content).pack()
         
-        print("======================================")
-
     else:
         pass
 
     # system--------------------------------------
     
-    if "system" in os.listdir(file_path) or "System" in os.listdir(file_path):
+    if "system" in os.listdir(file_path):
 
         zip_files = []
 
@@ -718,14 +719,14 @@ def Gscan(file_path):
                     zip_files.append(os.path.join(file))
 
         # ZIP 파일 목록 출력
-        print("system = " + zip_files[0])
+        # print("system = " + zip_files[0])
+        label=Label(frame, text="system = " + zip_files[0]).pack()
 
         # 파일 열기
         with open(file_path+system+sys_txt, "r", encoding="utf-8") as file:
             file_content = file.read()
-        print("Version_txt = " + file_content)
-
-        print("======================================")
+        # print("system_version_txt = " + file_content)
+        label=Label(frame, text="Version_txt = " + file_content).pack()
 
     else:
         pass
@@ -741,6 +742,7 @@ window = Tk()
 window.title("AutomationTool")
 window.geometry("500x800")
 
+# 메인 함수
 def main_function():
     if selected_project.get() == '1':
         GDSM()
@@ -769,10 +771,6 @@ for project in projects:
     )
     r.pack(fill='x', padx=5, pady=5)
 
-button = Button(window,
-                text = "Get Selected Project")
-button.pack(fill='x', padx=5, pady=5)
-
 
 # 텍스트
 label2=tkinter.Label(window, text="파일 경로를 입력하세요")
@@ -788,8 +786,8 @@ btn_versionCheck = Button(window, text = "VersionCheck", command = main_function
 btn_versionCheck.pack(fill='x', padx=5, pady=5)
 
 
-label2=tkinter.Label(window, text="내용을 삭제하려면 버튼을 클릭하세요")
-label2.pack(fill='x', padx=5, pady=5)
+label3=tkinter.Label(window, text="내용을 삭제하려면 버튼을 클릭하세요")
+label3.pack(fill='x', padx=5, pady=5)
 
 btn_cls = Button(window, text = "Clear", command=clear_frame)
 btn_cls.pack(fill='x', padx=5, pady=5)

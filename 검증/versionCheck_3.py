@@ -71,7 +71,7 @@ def GDSM():
         # ZIP 파일 목록 출력
         print("Critical = " + zip_files[0])
         zip_split = str(zip_files[0]).split("-")
-        split_str_new = str(zip_files[0]).strip(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
+        split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
         split_str_new_list.append(split_str_new)
         # label=Label(frame, text="Critical = " + zip_files[0]).pack()
         
@@ -120,18 +120,13 @@ def GDSM():
                 print("Diagnosis = " + zip_files[i])
                 # label=Label(frame, text="Diagnosis = " + zip_files[0]).pack()
                 zip_split = zip_files[i].split("-")
-                split_str_new = str(zip_files[i]).strip(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
-                print(zip_files[i])
-                print(zip_split[-3])
-                print(zip_split[-2])
-                print(zip_split[-1])
-                print(split_str_new)
+                split_str_new = str(zip_files[i]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
                 split_str_new_list.append(split_str_new)
 
         elif len(zip_files) == 1:
             print("Diagnosis = " + zip_files[0])
             zip_split = zip_files[0].split("-")
-            split_str_new = str(zip_files[0]).strip(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
+            split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
             split_str_new_list.append(split_str_new)
         
         
@@ -181,14 +176,14 @@ def GDSM():
                 print("Diagnosis_CV = " + zip_files[i])
                 # label=Label(frame, text="Diagnosis_CV = " + zip_files[i]).pack()
                 zip_split = zip_files[i].split("-")
-                split_str_new = str(zip_files[i]).strip(zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
+                split_str_new = str(zip_files[i]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
                 split_str_new_list.append(split_str_new)
 
         elif len(zip_files) == 1:
             print("Diagnosis_CV = " + zip_files[0])
             # label=Label(frame, text="Diagnosis_CV = " + zip_files[0]).pack()
             zip_split = zip_files[0].split("-")
-            split_str_new = str(zip_files[0]).strip(zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
+            split_str_new = str(zip_files[0]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
             split_str_new_list.append(split_str_new)
         
         # 파일 열기
@@ -233,7 +228,7 @@ def GDSM():
         # ZIP 파일 목록 출력
         print("ECU = " + zip_files[0])
         zip_split = str(zip_files[0]).split("-")
-        split_str_new = str(zip_files[0]).strip(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1])
+        split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
         split_str_new_list.append(split_str_new)
         # label=Label(frame, text="ECU = " + zip_files[0]).pack()
         
@@ -279,7 +274,7 @@ def GDSM():
         # ZIP 파일 목록 출력
         print("ECU_CV = " + zip_files[0])
         zip_split = zip_files[0].split("-")
-        split_str_new = str(zip_files[0]).strip(str(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1]))
+        split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
         split_str_new_list.append(split_str_new)
         # label=Label(frame, text="ECU_CV = " + zip_files[0]).pack()
 
@@ -326,7 +321,7 @@ def GDSM():
         # ZIP 파일 목록 출력
         print("System = " + zip_files[0])
         zip_split = zip_files[0].split("-")
-        split_str_new = str(zip_files[0]).strip(str(zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1]))
+        split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
         split_str_new_list.append(split_str_new)
         # label=Label(frame, text="System = " + zip_files[0]).pack()
 
