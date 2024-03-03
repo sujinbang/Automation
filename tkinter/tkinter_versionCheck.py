@@ -777,7 +777,7 @@ label2=tkinter.Label(window, text="파일 경로를 입력하세요")
 label2.pack(fill='x', padx=5, pady=5)
 
 # 입력창
-entry=tkinter.Entry(window, width=50)
+entry=tkinter.Entry(window, width=50, justify="center")
 entry.pack(fill='x', padx=5, pady=5)
 
 # 버튼
