@@ -11,7 +11,7 @@ Rsc = "\Resource"
 Rsc_txt = "\Resource_Version.txt"
 SupportApp = "\SupportApp"
 SupportApp_txt = "\SupportApp_Version.txt"
-System = "\system"
+Sys = "\system"
 Sys_txt = "\System_Version.txt"
 
 # 폴더명 변경
@@ -239,7 +239,7 @@ def Check_sys():
     zip_files = []
 
     # 상위 디렉토리부터 모든 하위 디렉토리 및 파일을 탐색
-    for root, dirs, files in os.walk(file_path+System):
+    for root, dirs, files in os.walk(file_path+Sys):
         for file in files:
             if file.endswith('.zip'):
                 # 확장자가 .zip인 파일은 리스트에 추가
@@ -254,7 +254,7 @@ def Check_sys():
     split_str_new_list.append(split_str_new)
 
     # 파일 열기
-    with open(file_path+System+Sys_txt, "r", encoding="utf-8") as file:
+    with open(file_path+Sys+Sys_txt, "r", encoding="utf-8") as file:
         file_content = file.read()
     # print("Version_txt = " + file_content)
     label=Label(frame, text="Version_txt = " + file_content).pack()
@@ -274,7 +274,9 @@ window = Tk()
 # 메뉴
 menubar=tkinter.Menu(window)
 menu=tkinter.Menu(menubar, tearoff=0)
-menubar.add_cascade(label="상위 메뉴 3", menu=menu)
+menu.add_command(label="VersionCheck")
+menu.add_command(label="Rename_4세대")
+menubar.add_cascade(label="메뉴", menu=menu)
 window.config(menu=menubar)
 
 
