@@ -271,13 +271,13 @@ def clear_frame():
 
 window = Tk()
 
-# 메뉴
-menubar=tkinter.Menu(window)
-menu=tkinter.Menu(menubar, tearoff=0)
-menu.add_command(label="VersionCheck")
-menu.add_command(label="Rename_4세대")
-menubar.add_cascade(label="메뉴", menu=menu)
-window.config(menu=menubar)
+# # 메뉴
+# menubar=tkinter.Menu(window)
+# menu=tkinter.Menu(menubar, tearoff=0)
+# menu.add_command(label="VersionCheck")
+# menu.add_command(label="Rename_4세대")
+# menubar.add_cascade(label="메뉴", menu=menu)
+# window.config(menu=menubar)
 
 
 window.title("AutomationTool")
