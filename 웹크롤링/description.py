@@ -20,7 +20,7 @@ driver.get('https://gims.gitauto.com:8080/jira/browse/GDSN-10324')
 # id = input("아이디: ")
 id = '230044'
 # pw = input("비밀번호: ")
-pw = 'qkdtnwls1!'
+pw = 'QWER!@34'
 eId = driver.find_element(By.XPATH, "//input[@name='os_username']").send_keys(id)
 ePw = driver.find_element(By.XPATH, "//input[@name='os_password']").send_keys(pw)
 loginBtn = driver.find_element(By.NAME, 'login').click()
