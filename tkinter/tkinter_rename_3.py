@@ -1,8 +1,7 @@
 import os
 from tkinter import *
-import tkinter
-from tkinter import messagebox
-# from tkinter_versionCheck import main_function
+import tkinter as tk
+from tkinter import messagebox, ttk
 
 # 변수 선언
 App = "\Application"
@@ -529,10 +528,17 @@ def clear_frame():
    for widgets in frame.winfo_children():
       widgets.destroy()
 
+# 화면 가운데 위치
 window = Tk()
-
 window.title("AutomationTool")
-window.geometry("500x800")
+# window.geometry("400x700")
+window_width = 400
+window_height = 700  # 높이 조정
+screen_width = window.winfo_screenwidth()
+screen_height = window.winfo_screenheight()
+center_x = int(screen_width / 2 - window_width / 2)
+center_y = int(screen_height / 2 - window_height / 2)
+window.geometry(f"{window_width}x{window_height}+{center_x}+{center_y}")
 
 # 메인 함수
 def Rename():
@@ -574,22 +580,22 @@ def VersionCheck():
         Check_sys()   
 
 # 파일 경로 입력
-label_title=tkinter.Label(window, text="*** 3세대 파일명 변경 Tool 입니다 ***", fg="green", relief="groove")
+label_title=Label(window, text="*** 3세대 파일명 변경 Tool 입니다 ***", fg="green", relief="groove")
 label_title.pack(fill='x', padx=5, pady=5)
 
 # 파일 경로 입력
-label1=tkinter.Label(window, text="[Step 1] 파일 경로를 입력하세요")
+label1=ttk.Label(window, text="[Step 1] 파일 경로를 입력하세요")
 label1.pack(fill='x', padx=5, pady=5)
 
-entry_filePath=tkinter.Entry(window, width=50, justify="center")
+entry_filePath=ttk.Entry(window, width=50, justify="center")
 entry_filePath.pack(fill='x', padx=5, pady=5)
 
 # 텍스트
-label2=tkinter.Label(window, text="[Step 2] 항목을 선택하세요")
-label2.pack()
+label2=ttk.Label(window, text="[Step 2] 항목을 선택하세요")
+label2.pack(fill='x', padx=5, pady=5)
 
 # 항목값
-selected_item = tkinter.StringVar()
+selected_item = tk.StringVar()
 items = (('Application', '1'),
         ('Critical', '2'),
         ('Diagnosis', '3'),
@@ -598,43 +604,41 @@ items = (('Application', '1'),
         ('ECU_CV', '6'),
         ('System', '7'))        
 
-# radio buttons
+# 라디오 버튼을 팩에 배치
 for item in items:
-    r = Radiobutton(
+    r = ttk.Radiobutton(
         window,
         text=item[0],
         value=item[1],
         variable=selected_item
     )
+    # 팩에 배치
     r.pack(padx=5, pady=5)
 
 # new file명 입력
-label3=tkinter.Label(window, text="[Step 3] 바꿀 파일명을 입력하세요")
+label3=ttk.Label(window, text="[Step 3] 바꿀 파일명을 입력하세요")
 label3.pack(fill='x', padx=5, pady=5)
 
-entry_newName=tkinter.Entry(window, width=50, justify="center")
+entry_newName=ttk.Entry(window, width=50, justify="center")
 entry_newName.pack(fill='x', padx=5, pady=5)
 
 # 버튼
-btn_Rename = Button(window, text = "Rename", command = Rename)
+btn_Rename = ttk.Button(window, text = "Rename", command = Rename)
 btn_Rename.pack(fill='x', padx=5, pady=5)
 
 # new file명 입력
-label3=tkinter.Label(window, text="[Step 4] 버전을 확인하세요")
+label3=ttk.Label(window, text="[Step 4] 버전을 확인하세요")
 label3.pack(fill='x', padx=5, pady=5)
 
-btn_versionCheck = Button(window, text = "VersionCheck", command = VersionCheck)
+btn_versionCheck = ttk.Button(window, text = "VersionCheck", command = VersionCheck)
 btn_versionCheck.pack(fill='x', padx=5, pady=5)
 
 # 프레임
 frame = LabelFrame(window, text="Output", relief="solid", bd=2, pady=10)
 frame.pack(fill='both')
 
-btn_cls = Button(window, text="Clear", command = clear_frame)
+btn_cls = ttk.Button(window, text="Clear", command = clear_frame)
 btn_cls.pack(padx=5, pady=5)
-
-
-
 
 
 window.mainloop()
