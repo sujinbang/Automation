@@ -6,9 +6,8 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 
 # 변수 선언
-Resource = "\Resource"
-Diagnosis = "\Diagnosis"
-Rsc = Resource  # 기본값으로 Resource 폴더 설정
+Rsc = "\\Resource"
+Diagnosis = "\\Diagnosis"
 
 # 폴더명 추출
 zip_files = []
@@ -23,7 +22,7 @@ def update_rsc_folder():
     if selected_item.get() == '1':
         Rsc = Diagnosis
     elif selected_item.get() == '2':
-        Rsc = Resource
+        Rsc = Rsc
 
 def rsc_fileList():
     zip_files.clear()  # 리스트 초기화
@@ -113,8 +112,8 @@ label1.pack(anchor='w')
 
 # 항목값
 selected_item = tk.StringVar(value='2')  # 기본값으로 4세대 선택
-items = (('3세대', '1'),
-         ('4세대', '2'))
+items = (('3세대 진단SW [GDSM]', '1'),
+         ('4세대 진단SW [GDSN]', '2'))
 
 # 프로젝트 선택 라디오 버튼
 for item in items:

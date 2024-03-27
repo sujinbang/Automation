@@ -4,20 +4,20 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 
 # 변수 선언
-App = "\Application"
-App_txt = "\Application_Version.txt"
-Critical = "\Critical"
-Critical_txt = "\Critical_Version.txt"
-Diagnosis = "\Diagnosis"
-Diagnosis_txt = "\Diagnosis_Version.txt"
-Diagnosis_CV = "\Diagnosis_CV"
-Diagnosis_CV_txt = "\Diagnosis_CV_Version.txt"
-ECU = "\ECU"
-ECU_txt = "\ECU_Version.txt"
-ECU_CV = "\ECU_CV"
-ECU_CV_txt = "\ECU_CV_Version.txt"
-Sys = "\system"
-Sys_txt = "\System_Version.txt"
+App = "\\Application"
+App_txt = "\\Application_Version.txt"
+Critical = "\\Critical"
+Critical_txt = "\\Critical_Version.txt"
+Diagnosis = "\\Diagnosis"
+Diagnosis_txt = "\\Diagnosis_Version.txt"
+Diagnosis_CV = "\\Diagnosis_CV"
+Diagnosis_CV_txt = "\\Diagnosis_CV_Version.txt"
+ECU = "\\ECU"
+ECU_txt = "\\ECU_Version.txt"
+ECU_CV = "\\ECU_CV"
+ECU_CV_txt = "\\ECU_CV_Version.txt"
+Sys = "\\system"
+Sys_txt = "\\System_Version.txt"
 
 # 폴더명 변경
 

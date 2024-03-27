@@ -1,6 +1,7 @@
 import os
 from tkinter import *
-import tkinter
+import tkinter as tk
+from tkinter import ttk
 
 def GDSN():
 
@@ -8,14 +9,14 @@ def GDSN():
     file_path = entry.get()
 
     # 변수 선언
-    App = "\Application"
-    App_txt = "\Application_Version.txt"
-    Rsc = "\Resource"
-    Rsc_txt = "\Resource_Version.txt"
-    SupportApp = "\SupportApp"
-    SupportApp_txt = "\SupportApp_Version.txt"
-    System = "\system"
-    Sys_txt = "\System_Version.txt"
+    App = "\\Application"
+    App_txt = "\\Application_Version.txt"
+    Rsc = "\\Resource"
+    Rsc_txt = "\\Resource_Version.txt"
+    SupportApp = "\\SupportApp"
+    SupportApp_txt = "\\SupportApp_Version.txt"
+    System = "\\system"
+    Sys_txt = "\\System_Version.txt"
 
 
     # Application-----------------------------------
@@ -198,20 +199,20 @@ def GDSM():
     file_path = entry.get()
 
     # 변수 선언
-    App = "\Application"
-    App_txt = "\Application_Version.txt"
-    Critical = "\Critical"
-    Critical_txt = "\Critical_Version.txt"
-    Diagnosis = "\Diagnosis"
-    Diagnosis_txt = "\Diagnosis_Version.txt"
-    Diagnosis_CV = "\Diagnosis_CV"
-    Diagnosis_CV_txt = "\Diagnosis_CV_Version.txt"
-    ECU = "\ECU"
-    ECU_txt = "\ECU_Version.txt"
-    ECU_CV = "\ECU_CV"
-    ECU_CV_txt = "\ECU_CV_Version.txt"
-    System = "\system"
-    Sys_txt = "\System_Version.txt"
+    App = "\\Application"
+    App_txt = "\\Application_Version.txt"
+    Critical = "\\Critical"
+    Critical_txt = "\\Critical_Version.txt"
+    Diagnosis = "\\Diagnosis"
+    Diagnosis_txt = "\\Diagnosis_Version.txt"
+    Diagnosis_CV = "\\Diagnosis_CV"
+    Diagnosis_CV_txt = "\\Diagnosis_CV_Version.txt"
+    ECU = "\\ECU"
+    ECU_txt = "\\ECU_Version.txt"
+    ECU_CV = "\\ECU_CV"
+    ECU_CV_txt = "\\ECU_CV_Version.txt"
+    System = "\\system"
+    Sys_txt = "\\System_Version.txt"
 
 
     # Application-----------------------------------
@@ -544,20 +545,20 @@ def Gscan():
     file_path = entry.get()
 
     # 변수 선언
-    App = r"\application"
-    App_txt = r"\application_version.txt"
-    critical = "\critical"
-    critical_txt = "\critical_version.txt"
-    diagnosis = "\diagnosis"
-    diagnosis_txt = "\diagnosis_version.txt"
-    diagnosis_cv = "\diagnosis_cv"
-    diagnosis_cv_txt = "\diagnosis_cv_version.txt"
-    diagnosis_im = "\diagnosis_im"
-    diagnosis_im_txt = "\diagnosis_im_version.txt"
-    gscan_os = "\os"
-    gscan_os_txt = "\os_version.txt"
-    system = "\system"
-    sys_txt = "\system_version.txt"
+    App = "\\application"
+    App_txt = "\\application_version.txt"
+    critical = "\\critical"
+    critical_txt = "\\critical_version.txt"
+    diagnosis = "\\diagnosis"
+    diagnosis_txt = "\\diagnosis_version.txt"
+    diagnosis_cv = "\\diagnosis_cv"
+    diagnosis_cv_txt = "\\diagnosis_cv_version.txt"
+    diagnosis_im = "\\diagnosis_im"
+    diagnosis_im_txt = "\\diagnosis_im_version.txt"
+    gscan_os = "\\os"
+    gscan_os_txt = "\\os_version.txt"
+    system = "\\system"
+    sys_txt = "\\system_version.txt"
 
 
     # application-----------------------------------
@@ -737,11 +738,6 @@ def clear_frame():
    for widgets in frame.winfo_children():
       widgets.destroy()
 
-window = Tk()
-
-window.title("AutomationTool")
-window.geometry("500x800")
-
 # 메인 함수
 def main_function():
     if selected_project.get() == '1':
@@ -751,54 +747,68 @@ def main_function():
     elif selected_project.get() == '3':
         Gscan()
 
+# 화면 가운데 위치
+window = Tk()
+window.title("파일 버전 확인 프로그램")
+# window.geometry("400x700")
+window_width = 400
+window_height = 600  # 높이 조정
+screen_width = window.winfo_screenwidth()
+screen_height = window.winfo_screenheight()
+center_x = int(screen_width / 2 - window_width / 2)
+center_y = int(screen_height / 2 - window_height / 2)
+window.geometry(f"{window_width}x{window_height}+{center_x}+{center_y}")
+
+
+# tkinter
+
+label_title=tk.Label(window, text="*** 파일 버전 확인 Tool 입니다 ***", fg="blue", relief="groove")
+label_title.pack(fill='x', padx=5, pady=5)
+
 # 텍스트
-label1=tkinter.Label(window, text="프로젝트를 선택하세요")
-label1.pack()
+label1=tk.Label(window, text="프로젝트를 선택하세요")
+label1.pack(padx=5, pady=5)
 
 # 항목값
-selected_project = tkinter.StringVar()
+selected_project = tk.StringVar()
 projects = (('3세대', '1'),
          ('4세대', '2'),
          ('Gscan', '3'))
 
 # radio buttons
 for project in projects:
-    r = Radiobutton(
+    r = ttk.Radiobutton(
         window,
         text=project[0],
         value=project[1],
         variable=selected_project
     )
-    r.pack(fill='x', padx=5, pady=5)
+    r.pack(padx=5, pady=5)
 
 
 # 텍스트
-label2=tkinter.Label(window, text="파일 경로를 입력하세요")
+label2=tk.Label(window, text="파일 경로를 입력하세요")
 label2.pack(fill='x', padx=5, pady=5)
 
 # 입력창
-entry=tkinter.Entry(window, width=50, justify="center")
+entry=ttk.Entry(window, width=50, justify="center")
 entry.pack(fill='x', padx=5, pady=5)
 
 # 버튼
 
-btn_versionCheck = Button(window, text = "VersionCheck", command = main_function)
-btn_versionCheck.pack(fill='x', padx=5, pady=5)
+btn_versionCheck = ttk.Button(window, text = "버전 확인...", command = main_function)
+btn_versionCheck.pack(padx=5, pady=5)
 
 
-label3=tkinter.Label(window, text="내용을 삭제하려면 버튼을 클릭하세요")
+label3=tk.Label(window, text="내용을 삭제하려면 버튼을 클릭하세요")
 label3.pack(fill='x', padx=5, pady=5)
 
-btn_cls = Button(window, text = "Clear", command=clear_frame)
-btn_cls.pack(fill='x', padx=5, pady=5)
+btn_cls = ttk.Button(window, text = "초기화...", command=clear_frame)
+btn_cls.pack(padx=5, pady=5)
 
 # 프레임
-frame = LabelFrame(window, text="Output", relief="solid", bd=2, pady=10)
-frame.pack(side="left", expand=True)
+frame = LabelFrame(window, text="확인")
+frame.pack(padx=10, pady=10, fill="x", expand=True)
 
-
-# 메시지 박스
-# from tkinter import messagebox
-# messagebox.showinfo()
 
 window.mainloop()
