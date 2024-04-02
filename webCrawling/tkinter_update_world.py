@@ -18,65 +18,44 @@ import chromedriver_autoinstaller
 
 def main_func():
 
-	# # 현대/기아 선택
-	# project = input("현대/기아 중 선택해주세요[현대 or 기아 로 입력] : ")
+	# 현대/기아/제네시스 선택
 	if selected_item1.get() == '1':
 		project = '현대'
 	elif selected_item1.get() == '2':
 		project = '기아'
+	elif selected_item1.get() == '3':
+		project = '제네시스'
 
-	# # 서비스센터/협력사 선택
-	# customer = input("센터/협력사 중 선택해주세요[센터 or 협력사 로 입력] :")
+	# 북미/유럽/중국 선택
 	if selected_item2.get() == '1':
-		customer = '센터'
+		country = '미국'
 	elif selected_item2.get() == '2':
-		customer = '협력사'
+		country = '캐나다'
+	elif selected_item2.get == '3':
+		country = '유럽'
+	elif selected_item2.get() == '4':
+		country = '중국'
+	elif selected_item2.get == '5':
+		country = '미국령'
 
 	# # ticket 기반
 	ticket = 'https://gims.gitauto.com:8080/jira/browse/'
 	# issue1 = input('진단에 넣을 승용 GIMS 이슈 번호를 입력하세요 : ')
 	issue1 = entry_gims1.get()
 	result_url1 = ticket + issue1
-	# issue2 = input('진단에 넣을 상용 GIMS 이슈 번호를 입력하세요 : ')
+
 	issue2 = entry_gims2.get()
 	result_url2 = ticket + issue2
+
 	# issue_ecu = input('ECU 업그레이드에 넣을 GIMS 이슈 번호를 입력하세요 : ')
 	issue_ecu = entry_gims3.get()
 	ecu_url = ticket + issue_ecu
 
-	# 현대와 기아 결과값 나누기
+	# result_out 함수 실행
 	return_list = result_out(result_url1, result_url2, ecu_url)
-
 	result = return_list[0]
-	num_res = result.find('KMC')
-	if (project == '현대' and customer == '센터') :
-		result = result[:num_res-1]
-	elif (project == '기아' and customer == '센터') :
-		result = result[num_res-1:]
-	else :
-		result = result
-
 	ecu = return_list[1]
-	num_ecu = ecu.find('KMC')
-	if (project == '현대' and customer == '센터'):
-		ecu = ecu[:num_ecu-1]
-	elif (project == '기아' and customer == '센터'):
-		ecu = ecu[num_ecu-1:]
-	else :
-		ecu = ecu
 
-	#연구소 내부 공유 삭제
-	if (result.find('연구소 내부') != -1) :
-		num_res2 = result.find('연구소 내부')
-		result = result[:num_res2-1] + result[num_res-1:]
-	else : 
-		result = result
-
-	if (ecu.find('연구소 내부') != -1) :
-		num_ecu2 = ecu.find('연구소 내부')
-		ecu = ecu[:num_ecu2-1] + ecu[num_ecu-1:]
-	else :
-		ecu = ecu
 
 	# 이미지 로고
 	if (project == '현대') :
@@ -85,6 +64,9 @@ def main_func():
 	elif(project == '기아') :
 		GITimg = "https://image.gitauto.com/gitauto/kor/popup/logo_kds_2_test_bang.png"
 		GITstring = "KDS 2.0을"
+	elif(project == '제네시스') :
+		GITimg = "https://image.gitauto.com/gitauto/kor/popup/logo_genesissmart_test_bang.png"
+		GITstring = "Genesis Smart를"
 
 	# html 결과문
 	
@@ -267,17 +249,7 @@ def main_func():
 
 	"""
 
-
 	file_path = entry_filePath.get()
-
-	if project == '현대' and customer == '센터':
-		file_name = '하이테크센터 현대.html'
-	elif project == '현대' and customer == '협력사':
-		file_name = '블루핸즈 현대.html'
-	elif project == '기아' and customer == '센터':
-		file_name = '기아 서비스 센터.html'
-	elif project == '기아' and customer == '협력사':
-		file_name = '기아 협력사.html'
 
 	printsave(html_output)
 
@@ -285,7 +257,7 @@ def main_func():
 
 	return
 
-# 진단
+
 def result_out(result_url1, result_url2, ecu_url) :
 
 	# 웹크롤링
@@ -293,13 +265,6 @@ def result_out(result_url1, result_url2, ecu_url) :
 	chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
 	# driver_path = f'./{chrome_ver}/chromedriver.exe'
 	driver_path = 'Z:\999_sjbang\웹크롤링\120\chromedriver.exe'
-
-	# if os.path.exists(driver_path):
-	# 	print(f"chrome driver is insatlled: {driver_path}")
-
-	# else:
-	# 	print(f"install the chrome driver(ver: {chrome_ver})")
-	# 	chromedriver_autoinstaller.install(True)
 
 
 	if getattr(sys, 'frozen', False) and hasattr(sys, "_MEIPASS"):
@@ -333,17 +298,12 @@ def result_out(result_url1, result_url2, ecu_url) :
 		project = '현대'
 	elif selected_item1.get() == '2':
 		project = '기아'
-
-	# # 서비스센터/협력사 선택
-	# customer = input("센터/협력사 중 선택해주세요[센터 or 협력사 로 입력] :")
-	if selected_item2.get() == '1':
-		customer = '센터'
-	elif selected_item2.get() == '2':
-		customer = '협력사'
+	elif selected_item1.get() == '3':
+		project = '제네시스'
 
 	# driver = webdriver.Chrome()
 
-	if (project == '현대' and customer == '협력사') or (project == '기아' and customer == '협력사'):
+	if "GDSN" in result_url2:
 		# selenium
 		driver.get(result_url1)
 		
@@ -376,7 +336,7 @@ def result_out(result_url1, result_url2, ecu_url) :
 		list_res = list_res.replace('\xa0', '')
 
 	
-	elif (project == '현대' and customer == '센터') or (project == '기아' and customer == '센터'):
+	elif "GDSN" not in result_url2:
 		# selenium
 		driver.get(result_url1)
 		
@@ -399,20 +359,26 @@ def result_out(result_url1, result_url2, ecu_url) :
 	driver.get(ecu_url)
 
 	time.sleep(3)
+	
+	# ECU 업그레이드
+	# 연결된 issue 없을 경우 null 값으로 처리
+	if "GDSN" in ecu_url:
+		# Beautiful Soup - Jira 티켓 내부 값 불러오기
+		html = driver.page_source
+		soup = bs(html, "html.parser")
+		html = soup.select('div.user-content-block')
 
-	# Beautiful Soup - Jira 티켓 내부 값 불러오기
-	html = driver.page_source
-	soup = bs(html, "html.parser")
-	html = soup.select('div.user-content-block')
+		list = []
+		for text in html:
+				# print(text.get_text())
+			list.append(text.get_text())
 
-	list = []
-	for text in html:
-			# print(text.get_text())
-		list.append(text.get_text())
-
-	# 티켓 내부 값 에서 줄바꿈표시를 <br>로 변경
-	list_ecu = list[0].replace('\n', '<br>')
-	list_ecu = list_ecu.replace('\xa0', '')
+		# 티켓 내부 값 에서 줄바꿈표시를 <br>로 변경
+		list_ecu = list[0].replace('\n', '<br>')
+		list_ecu = list_ecu.replace('\xa0', '')
+	
+	elif "GDSN" not in ecu_url:
+		list_ecu = ""
 
 	time.sleep(3)
 
@@ -432,22 +398,65 @@ def printsave(*a):
 		project = '현대'
 	elif selected_item1.get() == '2':
 		project = '기아'
+	elif selected_item1.get() == '3':
+		project = '제네시스'
 
-	# 서비스센터/협력사 선택
-	# customer = input("센터/협력사 중 선택해주세요[센터 or 협력사 로 입력] :")
+	# 북미/유럽/중국 선택
 	if selected_item2.get() == '1':
-		customer = '센터'
+		country = '미국'
 	elif selected_item2.get() == '2':
-		customer = '협력사'
+		country = '캐나다'
+	elif selected_item2.get == '3':
+		country = '유럽'
+	elif selected_item2.get() == '4':
+		country = '중국'
+	elif selected_item2.get == '5':
+		country = '미국령'
 
-	if project == '현대' and customer == '센터':
-		file_name = '하이테크센터 현대.html'
-	elif project == '현대' and customer == '협력사':
-		file_name = '블루핸즈 현대.html'
-	elif project == '기아' and customer == '센터':
-		file_name = '기아 서비스 센터.html'
-	elif project == '기아' and customer == '협력사':
-		file_name = '기아 협력사.html'
+	# # ticket 기반
+	ticket = 'https://gims.gitauto.com:8080/jira/browse/'
+	issue2 = entry_gims2.get()
+	result_url2 = ticket + issue2
+
+	# 북미
+	if country == '미국' and project == '제네시스' :	
+		file_name = 'GMA-PA.html'
+	elif country == '미국' and project == '현대' :
+		file_name = 'HMA-PA.html'
+	elif country == '미국' and project == '기아':
+		file_name = 'KMA-PA.html'
+	elif country == '캐나다' and project == '현대' :
+		file_name = 'HAC-PA.html'
+	elif country == '캐나다' and project == '기아':
+		file_name = 'KCI-PA.html'
+
+	# 유럽
+	if country == '유럽' and project == '제네시스' :	
+		file_name = 'GME-PA.html'
+	elif country == '유럽' and project == '현대' :
+		if "GDSN" not in result_url2:	# 승용
+			file_name = 'HME-PA.html'
+		elif "GDSN" in result_url2: # 상용
+			file_name = 'HME-CV.html'
+	elif country == '유럽' and project == '기아':
+		file_name = 'KME-PA.html'
+
+	# 미국령
+	if country == '미국령' and project == '현대':
+		file_name = 'HMU-PA.html'
+	elif country == '미국령' and project == '기아':
+		file_name = 'KMU-PA.html'
+
+	# 중국
+	if country == '중국' and project == '현대':
+		if "GDSN" not in result_url2:	# 승용
+			file_name = 'HBHMC-PA.html'
+		elif "GDSN" in result_url2: # 상용
+			file_name = 'HS-CV.html'
+	elif country == '중국' and project == '기아':
+		file_name = 'KDYKMC-PA.html'
+	elif country == '중국' and project == '제네시스':
+		file_name = 'GMC-PA.html'
 
 	# 내수 고객사별 정리
 	file = open(file_path+file_name, 'a', encoding='UTF-8')
@@ -465,18 +474,15 @@ def info():
 # 화면 가운데 위치
 window = Tk()
 window.title("업데이트 문서 자동 작성 프로그램")
-
-
-# window.geometry("400x700")
 window_width = 400
-window_height = 700  # 높이 조정
+window_height = 750  # 높이 조정
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
 center_x = int(screen_width / 2 - window_width / 2)
 center_y = int(screen_height / 2 - window_height / 2)
 window.geometry(f"{window_width}x{window_height}+{center_x}+{center_y}")
 
-label_title=Label(window, text="*** [한국] 업데이트 문서 자동 작성 프로그램 입니다 ***", fg="purple", relief="groove")
+label_title=Label(window, text="*** [해외] 업데이트 문서 자동 작성 프로그램 입니다 ***", fg="purple", relief="groove")
 label_title.pack(fill='x', padx=5, pady=5)
 
 label_frame1 = ttk.LabelFrame(window, text="설정")
@@ -495,34 +501,17 @@ label_pw.pack(anchor='w')
 entry_pw = ttk.Entry(label_frame1, width=50, justify="center")
 entry_pw.pack(padx=5, pady=5)
 
-# 현대/기아 선택
-label_project=ttk.Label(label_frame1, text="현대/기아 중 선택")
-label_project.pack(anchor='w')
-
-# 라디오 버튼
-selected_item1 = tk.StringVar()
-items = (('현대', '1'),
-        ('기아', '2'))
-
-# 라디오 버튼을 팩에 배치
-for item in items:
-    r = ttk.Radiobutton(
-        label_frame1,
-        text=item[0],
-        value=item[1],
-        variable=selected_item1
-    )
-    # 팩에 배치
-    r.pack(padx=5, pady=5)
-
-# 센터/협력사 선택
-label_gbn=ttk.Label(label_frame1, text="센터/협력사 중 선택")
+# 북미/유럽/중국 선택
+label_gbn=ttk.Label(label_frame1, text="미국/캐나다/유럽/중국 중 선택")
 label_gbn.pack(anchor='w')
 
 # 라디오 버튼
 selected_item2 = tk.StringVar()
-items = (('센터', '1'),
-        ('협력사', '2'))
+items = (('미국', '1'),
+		 ('캐나다', '2'),
+        ('유럽', '3'),
+		('중국', '4'),
+		('미국령', '5'))
 
 # 라디오 버튼을 팩에 배치
 for item in items:
@@ -531,6 +520,27 @@ for item in items:
         text=item[0],
         value=item[1],
         variable=selected_item2
+    )
+    # 팩에 배치
+    r.pack(padx=5, pady=5)
+
+# 현대/기아/제네시스 선택
+label_project=ttk.Label(label_frame1, text="현대/기아/제네시스 중 선택")
+label_project.pack(anchor='w')
+
+# 라디오 버튼
+selected_item1 = tk.StringVar()
+items = (('현대', '1'),
+        ('기아', '2'),
+		('제네시스', '3'))
+
+# 라디오 버튼을 팩에 배치
+for item in items:
+    r = ttk.Radiobutton(
+        label_frame1,
+        text=item[0],
+        value=item[1],
+        variable=selected_item1
     )
     # 팩에 배치
     r.pack(padx=5, pady=5)
