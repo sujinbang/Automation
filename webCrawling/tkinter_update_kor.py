@@ -292,7 +292,7 @@ def result_out(result_url1, result_url2, ecu_url) :
 	# Check if chrome driver is installed or not
 	chrome_ver = chromedriver_autoinstaller.get_chrome_version().split('.')[0]
 	# driver_path = f'./{chrome_ver}/chromedriver.exe'
-	driver_path = 'Z:\999_sjbang\웹크롤링\120\chromedriver.exe'
+	driver_path = 'Z:\chromedriver\120\chromedriver.exe'
 
 	# if os.path.exists(driver_path):
 	# 	print(f"chrome driver is insatlled: {driver_path}")

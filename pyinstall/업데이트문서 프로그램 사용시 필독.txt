@@ -1,0 +1,1 @@
+\webCrawling\120 파일을 Z:\chromedriver\120 파일로 세팅 후 프로그램 실행하여야 합니다.
