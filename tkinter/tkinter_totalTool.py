@@ -115,16 +115,6 @@ class rename_3:
             # 팩에 배치
             r.pack(padx=5, pady=5)
 
-        # new file명 입력
-        self.label3=tk.Label(self.label_frame1, text="[Step 3] 바꿀 파일명을 입력하세요")
-        self.label3.pack(fill='x', padx=5, pady=5)
-
-        self.entry_newName=ttk.Entry(self.label_frame1, width=50, justify="center")
-        self.entry_newName.pack(fill='x', padx=5, pady=5)
-
-        # 버튼
-        btn_Rename = ttk.Button(self.label_frame1, text = "파일명 변경", command = self.Rename)
-        btn_Rename.pack(fill='x', padx=5, pady=5)
 
         # new file명 입력
         self.label3=tk.Label(self.label_frame1, text="[Step 4] 버전을 확인하세요")
@@ -141,7 +131,18 @@ class rename_3:
         self.label4.pack(padx=0.01, pady=0.01)
 
         btn_cls = ttk.Button(self.label_frame1, text="초기화", command = self.clear_frame)
-        btn_cls.pack(padx=5, pady=5)
+        btn_cls.pack(fill='x', padx=5, pady=5)
+
+        # new file명 입력
+        self.label4=tk.Label(self.label_frame1, text="[Step 4] 바꿀 파일명을 입력하세요")
+        self.label4.pack(fill='x', padx=5, pady=5)
+
+        self.entry_newName=ttk.Entry(self.label_frame1, width=50, justify="center")
+        self.entry_newName.pack(fill='x', padx=5, pady=5)
+
+        # 버튼
+        btn_Rename = ttk.Button(self.label_frame1, text = "파일명 변경", command = self.Rename)
+        btn_Rename.pack(padx=5, pady=5)
 
     # 폴더명 변경
 
@@ -409,6 +410,7 @@ class rename_3:
                         item_list.append(item)
                         # print("Application = " + item)
                         label=Label(self.frame, text="Application = " + item).pack()
+                        entry=self.entry_newName.insert(0, item)
 
 
             # 파일 열기
@@ -444,6 +446,7 @@ class rename_3:
             split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
             split_str_new_list.append(split_str_new)
             label=Label(self.frame, text="Critical = " + zip_files[0]).pack()
+            entry=self.entry_newName.insert(0, split_str_new)
             
             # 파일 열기
             with open(file_path+Critical+Critical_txt, "r", encoding="utf-8") as file:
@@ -480,6 +483,7 @@ class rename_3:
                     zip_split = zip_files[i].split("-")
                     split_str_new = str(zip_files[i]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
                     split_str_new_list.append(split_str_new)
+                entry=self.entry_newName.insert(0, split_str_new)
 
             elif len(zip_files) == 1:
                 # print("Diagnosis = " + zip_files[0])
@@ -487,6 +491,7 @@ class rename_3:
                 zip_split = zip_files[0].split("-")
                 split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
                 split_str_new_list.append(split_str_new)
+                entry=self.entry_newName.insert(0, split_str_new)
             
             
             # 파일 열기
@@ -524,6 +529,7 @@ class rename_3:
                     zip_split = zip_files[i].split("-")
                     split_str_new = str(zip_files[i]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
                     split_str_new_list.append(split_str_new)
+                entry=self.entry_newName.insert(0, split_str_new)
 
             elif len(zip_files) == 1:
                 # print("Diagnosis_CV = " + zip_files[0])
@@ -531,6 +537,7 @@ class rename_3:
                 zip_split = zip_files[0].split("-")
                 split_str_new = str(zip_files[0]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
                 split_str_new_list.append(split_str_new)
+                entry=self.entry_newName.insert(0, split_str_new)
             
             # 파일 열기
             with open(file_path+Diagnosis_CV+Diagnosis_CV_txt, "r", encoding="utf-8") as file:
@@ -565,6 +572,7 @@ class rename_3:
             split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
             split_str_new_list.append(split_str_new)
             label=Label(self.frame, text="ECU = " + zip_files[0]).pack()
+            entry=self.entry_newName.insert(0, split_str_new)
             
             # 파일 열기
             with open(file_path+ECU+ECU_txt, "r", encoding="utf-8") as file:
@@ -597,6 +605,7 @@ class rename_3:
             split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
             split_str_new_list.append(split_str_new)
             label=Label(self.frame, text="ECU_CV = " + zip_files[0]).pack()
+            entry=self.entry_newName.insert(0, split_str_new)
 
             
             # 파일 열기
@@ -630,8 +639,9 @@ class rename_3:
             # print("System = " + zip_files[0])
             label=Label(self.frame, text="System = " + zip_files[0]).pack()
             zip_split = zip_files[0].split("-")
-            split_str_new = zip_split[0]+"-"+zip_split[1]+"-"+zip_split[2]
+            split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
             split_str_new_list.append(split_str_new)
+            entry=self.entry_newName.insert(0, split_str_new)
 
             # 파일 열기
             with open(file_path+Sys+Sys_txt, "r", encoding="utf-8") as file:
@@ -744,18 +754,7 @@ class rename_4:
             r.pack(padx=5, pady=5)
 
         # new file명 입력
-        self.label3=tk.Label(self.label_frame1, text="[Step 3] 바꿀 파일명을 입력하세요")
-        self.label3.pack(fill='x', padx=5, pady=5)
-
-        self.entry_newName=ttk.Entry(self.label_frame1, width=50, justify="center")
-        self.entry_newName.pack(fill='x', padx=5, pady=5)
-
-        # 버튼
-        btn_Rename = ttk.Button(self.label_frame1, text = "파일명 변경", command = self.Rename)
-        btn_Rename.pack(fill='x', padx=5, pady=5)
-
-        # new file명 입력
-        self.label3=tk.Label(self.label_frame1, text="[Step 4] 버전을 확인하세요")
+        self.label3=tk.Label(self.label_frame1, text="[Step 3] 버전을 확인하세요")
         self.label3.pack(fill='x', padx=5, pady=5)
 
         btn_versionCheck = ttk.Button(self.label_frame1, text = "버전 확인", command = self.VersionCheck)
@@ -769,7 +768,18 @@ class rename_4:
         self.label4.pack(padx=0.01, pady=0.01)
 
         btn_cls = ttk.Button(self.label_frame1, text="초기화", command = self.clear_frame)
-        btn_cls.pack(padx=5, pady=5)
+        btn_cls.pack(fill='x', padx=5, pady=5)
+
+        # new file명 입력
+        self.label4=tk.Label(self.label_frame1, text="[Step 4] 바꿀 파일명을 입력하세요")
+        self.label4.pack(fill='x', padx=5, pady=5)
+
+        self.entry_newName=ttk.Entry(self.label_frame1, width=50, justify="center")
+        self.entry_newName.pack(fill='x', padx=5, pady=5)
+
+        # 버튼
+        btn_Rename = ttk.Button(self.label_frame1, text = "파일명 변경", command = self.Rename)
+        btn_Rename.pack(padx=5, pady=5)
 
     ### Rename
     # Application
@@ -907,6 +917,7 @@ class rename_4:
                     item_list.append(item)
                     # print("Application = " + item)
                     label=Label(self.frame, text="Application = " + item).pack()
+                    entry=self.entry_newName.insert(0, item)
 
 
         # 파일 열기
@@ -937,6 +948,7 @@ class rename_4:
                 zip_split = zip_files[i].split("-")
                 split_str_new = zip_split[0]+"-"+zip_split[1]+"-"+zip_split[2]
                 split_str_new_list.append(split_str_new)
+                entry=self.entry_newName.insert(0, split_str_new)
 
         elif len(zip_files) == 1:
             # print("Resource = " + zip_files[0])
@@ -944,6 +956,7 @@ class rename_4:
             zip_split = zip_files[0].split("-")
             split_str_new = zip_split[0]+"-"+zip_split[1]+"-"+zip_split[2]
             split_str_new_list.append(split_str_new)
+            entry=self.entry_newName.insert(0, split_str_new)
         
         # 파일 열기
         with open(file_path+Rsc+Rsc_txt, "r", encoding="utf-8") as file:
@@ -964,6 +977,7 @@ class rename_4:
                     item_list.append(item)
                     # print("SupportApp = " + item)
                     label=Label(self.frame, text="SupportApp = " + item).pack()
+                    entry=self.entry_newName.insert(0, item)
 
         # 파일 열기
         with open(file_path+SupportApp+SupportApp_txt, "r", encoding="utf-8") as file:
@@ -1000,6 +1014,7 @@ class rename_4:
         zip_split = zip_files[0].split("-")
         split_str_new = zip_split[0]+"-"+zip_split[1]+"-"+zip_split[2]
         split_str_new_list.append(split_str_new)
+        entry=self.entry_newName.insert(0, split_str_new)
 
         # 파일 열기
         with open(file_path+Sys+Sys_txt, "r", encoding="utf-8") as file:
