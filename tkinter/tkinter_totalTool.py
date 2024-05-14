@@ -117,7 +117,7 @@ class rename_3:
 
 
         # new file명 입력
-        self.label3=tk.Label(self.label_frame1, text="[Step 4] 버전을 확인하세요")
+        self.label3=tk.Label(self.label_frame1, text="[Step 3] 버전을 확인하세요")
         self.label3.pack(fill='x', padx=5, pady=5)
 
         btn_versionCheck = ttk.Button(self.label_frame1, text = "버전 확인", command = self.VersionCheck)
@@ -661,6 +661,8 @@ class rename_3:
     def clear_frame(self):
         for widgets in self.frame.winfo_children():
             widgets.destroy()
+            self.entry_newName.delete(0, END)
+
 
     # 메인 함수
     def Rename(self):
@@ -1028,6 +1030,7 @@ class rename_4:
     def clear_frame(self):
         for widgets in self.frame.winfo_children():
             widgets.destroy()
+            self.entry_newName.delete(0, END)
 
     # 메인 함수
     def Rename(self):
