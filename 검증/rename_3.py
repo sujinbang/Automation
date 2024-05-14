@@ -1,3 +1,4 @@
+#--
 import os
 
 file_path = input("♥♥♥ 파일경로를 입력하세요 : ")
