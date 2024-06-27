@@ -1,3 +1,4 @@
+# -- 전체 통합 프로그램 입니다
 import os
 from tkinter import *
 import tkinter as tk
@@ -656,13 +657,11 @@ class rename_3:
 
 
     # tkinter
-
     # 프레임 내용 삭제
     def clear_frame(self):
         for widgets in self.frame.winfo_children():
             widgets.destroy()
             self.entry_newName.delete(0, END)
-
 
     # 메인 함수
     def Rename(self):
@@ -950,7 +949,7 @@ class rename_4:
                 zip_split = zip_files[i].split("-")
                 split_str_new = zip_split[0]+"-"+zip_split[1]+"-"+zip_split[2]
                 split_str_new_list.append(split_str_new)
-                entry=self.entry_newName.insert(0, split_str_new)
+            entry=self.entry_newName.insert(0, split_str_new)
 
         elif len(zip_files) == 1:
             # print("Resource = " + zip_files[0])
@@ -1904,7 +1903,7 @@ class CompressApp:
                 last_file = file_name.split('-')[-2] + '-' + file_name.split('-')[-1] + '.zip'
             file_version = file_name.split('-')[0] + '-' + file_name.split('-')[1] + '-' + file_name.split('-')[2] + '-' + file_name.split('-')[3] + '-' + file_name.split('-')[4] + '-' + file_name.split('-')[5]
 
-        zip_counter = 1
+        zip_counter = int(date_part[-2:])
         new_file_name = file_version + '-'+ date_part + '-' + last_file
         zip_file_name = f"{output_path}/{new_file_name}"
         # zip_file_name = f"{output_path}/{file_name}{zip_counter:02d}.zip"
@@ -1923,6 +1922,7 @@ class CompressApp:
 
                     zip_file.close()
                     zip_counter += 1
+
                     if zip_counter < 100:
                         date_part_rep = date_part[:-2] + date_part[-2:].replace(date_part[-2:], f"{zip_counter:02d}")
                         # zip_file_name = f"{output_path}/{file_name}{zip_counter:02d}.zip"
@@ -2119,6 +2119,219 @@ class nullCheck:
         self.rsc_fileList()  # 리소스 파일 리스트
         self.fileCheck()  # 파일 확인
 
+class rscCheck:
+
+    def __init__(self, window8):
+        window8.title("4세대 리소스 정합성 확인 프로그램")
+        # window.geometry("400x700")
+        window_width = 400
+        window_height = 400  # 높이 조정
+        screen_width = window8.winfo_screenwidth()
+        screen_height = window8.winfo_screenheight()
+        center_x = int(screen_width / 2 - window_width / 2)
+        center_y = int(screen_height / 2 - window_height / 2)
+        window8.geometry(f"{window_width}x{window_height}+{center_x}+{center_y}")
+
+        self.build_ui(window8)
+
+    def build_ui(self, window8):
+        # 파일 경로 입력
+        self.label_title=tk.Label(window8, text="*** 수동 취합 검증 프로그램 ***", fg="blue", relief="groove")
+        self.label_title.pack(fill='x', padx=5, pady=5)
+
+        self.label_frame1 = ttk.LabelFrame(window8, text="설정")
+        self.label_frame1.pack(padx=10, pady=10, fill="x", expand=True)
+
+        self.label1 = Label(self.label_frame1, text="확인이 필요한 항목을 선택하세요")
+        self.label1.pack(anchor='w')
+
+        # 항목값
+        self.selected_item = tk.StringVar()
+        items = (('Resource', '1'),
+                ('System', '2'))
+
+        # 프로젝트 선택 라디오 버튼
+        for item in items:
+            r = ttk.Radiobutton(
+                self.label_frame1,
+                text=item[0],
+                value=item[1],
+                variable=self.selected_item
+            )
+            r.pack(padx=5, pady=5)
+
+        self.label2 = Label(self.label_frame1, text="파일 경로:")
+        self.label2.pack(anchor='w')
+
+        self.entry_filePath = ttk.Entry(self.label_frame1, width=50, justify="center")
+        self.entry_filePath.pack(padx=5, pady=5)
+
+        btn_Check = ttk.Button(self.label_frame1, text="파일 확인", command=self.main_func)
+        btn_Check.pack(padx=5, pady=5)
+
+        # 프레임
+        self.frame = ttk.LabelFrame(self.label_frame1, text="Output")
+        self.frame.pack(fill="x")
+
+        self.label3 = Label(self.frame, text="")
+        self.label3.pack()
+
+        btn_cls = ttk.Button(self.label_frame1, text="초기화", command=self.clear_frame)
+        btn_cls.pack(padx=5, pady=5)
+
+    def main_func(self):
+
+        # 변수 선언
+        sqlitedb = "\\systemdb\\system"
+        auxFunc = "\\AuxFunction"
+        binroot = "\\BIN"
+
+        sqlitedbList = ['ECU_mapping.sqlite', 'SoftwareInformation.sqlite', 'SpecialFunction.sqlite', 'GDSN_AUXmultilanguage.sqlite', 'GDSNmultilanguage.sqlite', 'GDSMultilanguage_CV.sqlite']
+        auxFuncList = ['ECUMapping.git', 'ECUMapping.gwm']
+        binrootList = ['VCI1', 'VCI2', 'VCI2W', 'VMI1', 'TPMS', 'TPMS_NEW']
+
+        global Rsc
+        file_path = self.entry_filePath.get()
+        zip_files = []
+        zip_files.clear()  # 리스트 초기화
+        if self.selected_item.get() == '1':
+            Rsc = "\\Resource" # Resource 선택 시
+        elif self.selected_item.get() == '2':
+            Rsc = "\\system" # system 선택 시
+
+        # 상위 디렉토리부터 모든 하위 디렉토리 및 파일을 탐색
+        for root, dirs, files in os.walk(file_path + Rsc):
+            for file in files:
+                if file.endswith('.zip'):
+                    # 확장자가 .zip인 파일은 리스트에 추가
+                    zip_files.append(os.path.join(file))
+
+        rsc_path = file_path + Rsc
+        for i in range(0, len(zip_files)):
+            zip_file_rep = zip_files[i].replace('.zip', '')
+            file_name = file_path + Rsc + "\\" + zip_file_rep
+
+            # 압축 파일 해제
+            dirsList = []
+            for dirs in os.listdir(rsc_path):
+                dirsList.append(dirs)
+            if zip_file_rep not in dirsList:
+                os.makedirs(file_name, exist_ok=True)  # 폴더 생성
+                zipfile.ZipFile(file_path + Rsc + "\\" + zip_files[i]).extractall(file_path + Rsc + "\\" + zip_file_rep)
+            elif zip_file_rep in dirs:
+                shutil.rmtree(file_name)  # 폴더 전체 삭제
+                os.makedirs(file_name, exist_ok=True)  # 폴더 생성
+                zipfile.ZipFile(file_path + Rsc + "\\" + zip_files[i]).extractall(file_path + Rsc + "\\" + zip_file_rep)
+
+            # sqlite, AuxFunction, BIN
+            fileList_sqlite = []
+            fileList_auxFunc = []
+            fileList_bin = []
+            for (root, dirs, files) in os.walk(file_name+sqlitedb):
+                fileList_sqlite.append(files)
+            for (root, dirs, files) in os.walk(file_name+auxFunc):
+                fileList_auxFunc.append(files)
+            # for (root, dirs, files) in os.walk(file_name+binroot):
+            #     fileList_bin.append(files)
+
+            # 파일 확인
+            # Resource
+            if self.selected_item.get() == '1':
+                fileFail_sqlite = []
+                fileFail_auxFunc = []
+                fileFail_bin = []
+                # sqlite
+                if len(fileList_sqlite) != 0:
+                    for i in range(0, len(fileList_sqlite[0])):
+                        if fileList_sqlite[0][i] in sqlitedbList :
+                            fileFail_sqlite.append(fileList_sqlite[0][i])
+                    if len(fileFail_sqlite) != 0:
+                        for j in range(0, len(fileFail_sqlite)):
+                            label = Label(self.frame, text = "systemdb\system : " + fileFail_sqlite[j] + " 파일 확인!!!!!!" + '\n', fg="red").pack()
+                    elif len(fileFail_sqlite) == 0:
+                        label = Label(self.frame, text="systemdb\system : " + 'PASS' + '\n', fg="blue").pack()
+                else:
+                    pass
+                # auxFunc
+                if len(fileList_auxFunc) != 0:
+                    for i in range(0, len(fileList_auxFunc[0])):
+                        if fileList_auxFunc[0][i] in auxFuncList :
+                            fileFail_auxFunc.append(fileList_auxFunc[0][i])
+                    if len(fileFail_auxFunc) != 0:
+                        for j in range(0, len(fileFail_auxFunc)):
+                            label = Label(self.frame, text = "AuxFunction : " + fileFail_auxFunc[j] + " 파일 확인!!!!!!" + '\n', fg="red").pack()
+                    elif len(fileFail_auxFunc) == 0:
+                        label = Label(self.frame, text="AuxFunction : " + 'PASS' + '\n', fg="blue").pack()
+                else:
+                    pass
+                # # BIN
+                # if len(fileList_bin) != 0:
+                #     for i in range(0, len(fileList_bin[0])):
+                #         if fileList_bin[0][i] in binrootList :
+                #             fileFail_bin.append(fileList_bin[0][i])
+                #     if len(fileFail_bin) != 0:
+                #         for j in range(0, len(fileFail_bin)):
+                #             label = Label(frame, text = "BIN : " + fileFail_bin[j] + " 파일 확인!!!!!!" + '\n', fg="red").pack()
+                #     elif len(fileFail_bin) == 0:
+                #         label = Label(frame, text="BIN : " + 'PASS' + '\n', fg="blue").pack()
+                # else :
+                #     pass
+
+            # System
+            elif self.selected_item.get() == '2':
+                fileFail_sqlite = []
+                fileFail_auxFunc = []
+                fileFail_bin = []
+                # sqlite
+                if len(fileList_sqlite) != 0:
+                    for i in range(0, len(fileList_sqlite[0])):
+                        if fileList_sqlite[0][i] not in sqlitedbList :
+                            fileFail_sqlite.append(fileList_sqlite[0][i])
+                    if len(fileFail_sqlite) != 0:
+                        for j in range(0, len(fileFail_sqlite)):
+                            label = Label(self.frame, text = "systemdb\system : " + fileFail_sqlite[j] + " 파일 확인!!!!!!" + '\n', fg="red").pack()
+                    elif len(fileFail_sqlite) == 0: # System에 sqlite 파일이 없으면
+                        label = Label(self.frame, text="systemdb\system : " + 'PASS' + '\n', fg="blue").pack()
+                else :
+                    pass
+                # auxFunc
+                if len(fileList_auxFunc) != 0:
+                    for i in range(0, len(fileList_auxFunc[0])):
+                        if fileList_auxFunc[0][i] not in auxFuncList :
+                            fileFail_auxFunc.append(fileList_auxFunc[0][i])
+                    if len(fileFail_auxFunc) != 0:
+                        for j in range(0, len(fileFail_auxFunc)):
+                            label = Label(self.frame, text = "AuxFunction : " + fileFail_auxFunc[j] + " 파일 확인!!!!!!" + '\n', fg="red").pack()
+                    elif len(fileFail_auxFunc) == 0:
+                        label = Label(self.frame, text="AuxFunction : " + 'PASS' + '\n', fg="blue").pack()
+                else :
+                    pass
+                # # BIN
+                # if len(fileList_bin) != 0:
+                #     for i in range(0, len(fileList_bin[0])):
+                #         if fileList_bin[0][i] not in binrootList :
+                #             fileFail_bin.append(fileList_bin[0][i])
+                #     if len(fileFail_bin) != 0: # BIN
+                #         for j in range(0, len(fileFail_bin)):
+                #             label = Label(frame, text = "BIN : " + fileFail_bin[j] + " 파일 확인!!!!!!" + '\n', fg="red").pack()
+                #     elif len(fileFail_bin) == 0:
+                #         label = Label(frame, text="BIN : " + 'PASS' + '\n', fg="blue").pack()
+                # else :
+                #     pass
+            
+        response = messagebox.askyesno("확인", "압축 해제한 파일을 삭제하시겠습니까?")
+        if response == 1:  # 사용자가 '확인'을 클릭한 경우
+            for i in range(0, len(zip_files)):
+                zip_file_rep = zip_files[i].replace('.zip', '')
+                shutil.rmtree(file_path + Rsc + "\\" + zip_file_rep)
+            messagebox.showinfo("알림", "압축 해제한 파일이 성공적으로 삭제되었습니다.")
+        else:
+            messagebox.showinfo("알림", "파일 삭제가 취소되었습니다.")
+
+    def clear_frame(self):
+        for widgets in self.frame.winfo_children():
+            widgets.destroy()
+
 class korea:
 
     def __init__(self, window6):
@@ -2224,7 +2437,6 @@ class korea:
         self.entry_filePath.pack(padx=5, pady=5)
 
         Btn = ttk.Button(self.label_frame1, text="시작...", command=self.main_func).pack(pady=5)
-
 
     def main_func(self):
 
@@ -3260,6 +3472,12 @@ def createNewWindow5():
     app = nullCheck(window5)
     window5.mainloop()
 
+def createNewWindow8():
+    window8 = tk.Toplevel(mainWindow)
+    app = rscCheck(window8)
+    window8.mainloop()
+
+#-- 업데이트 문서 --
 def createNewWindow6():
     window6 = tk.Toplevel(mainWindow)
     app = korea(window6)
@@ -3290,6 +3508,7 @@ label_frame2 = ttk.LabelFrame(mainWindow, text="업데이트 문서")
 label_frame2.pack(padx=10, pady=10, fill="x", expand=True)
 
 # 버튼
+# -- label_frame
 button1 = ttk.Button(label_frame, text="3세대 파일명 변경 프로그램", command=createNewWindow1)
 button1.pack(padx=7, pady=7)
 button2 = ttk.Button(label_frame, text="4세대 파일명 변경 프로그램", command=createNewWindow2)
@@ -3300,6 +3519,9 @@ button4 = ttk.Button(label_frame, text="자동 분할 압축 프로그램", comm
 button4.pack(padx=7, pady=7)
 button5 = ttk.Button(label_frame, text="빈 파일 확인 프로그램", command=createNewWindow5)
 button5.pack(padx=7, pady=7)
+button8 = ttk.Button(label_frame, text="수동 취합 검증 프로그램", command=createNewWindow8)
+button8.pack(padx=7, pady=7)
+# -- label_frame2
 button6 = ttk.Button(label_frame2, text="한국", command=createNewWindow6)
 button6.pack(padx=7, pady=7)
 button7 = ttk.Button(label_frame2, text="해외", command=createNewWindow7)
