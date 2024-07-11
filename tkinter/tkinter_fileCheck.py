@@ -1,3 +1,4 @@
+# -- 파일 체크 프로그램 입니다
 import os
 import shutil
 import zipfile

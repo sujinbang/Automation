@@ -135,7 +135,7 @@ class rename_3:
         btn_cls.pack(fill='x', padx=5, pady=5)
 
         # new file명 입력
-        self.label4=tk.Label(self.label_frame1, text="[Step 4] 바꿀 파일명을 입력하세요")
+        self.label4=tk.Label(self.label_frame1, text="[Step 4] 변경할 파일명을 입력하세요")
         self.label4.pack(fill='x', padx=5, pady=5)
 
         self.entry_newName=ttk.Entry(self.label_frame1, width=50, justify="center")
@@ -772,7 +772,7 @@ class rename_4:
         btn_cls.pack(fill='x', padx=5, pady=5)
 
         # new file명 입력
-        self.label4=tk.Label(self.label_frame1, text="[Step 4] 바꿀 파일명을 입력하세요")
+        self.label4=tk.Label(self.label_frame1, text="[Step 4] 변경할 파일명을 입력하세요")
         self.label4.pack(fill='x', padx=5, pady=5)
 
         self.entry_newName=ttk.Entry(self.label_frame1, width=50, justify="center")
@@ -1628,18 +1628,30 @@ class versionCheck:
 
         if "application" in os.listdir(file_path):
 
+            item_list = []
+
             # 폴더명 추출
             for item in os.listdir(file_path+app):
                 sub_folder = os.path.join(file_path+app, item) # 폴더경로 + 폴더명
                 if os.path.isdir(sub_folder):
-                    # print("application = " + item)
-                    label=Label(self.frame, text="Application = " + item).pack()
+                    if '.txt' not in item:
+                        item_list.append(item)
+                        # print("Application = " + item)
+                        label=Label(self.frame, text="Application = " + item).pack()
 
             # 파일 열기
             with open(file_path+app+app_txt, "r", encoding="utf-8") as file:
                 file_content = file.read()
                 # print("application_version_txt = " + file_content)
                 label=Label(self.frame, text="Version_txt = " + file_content).pack()
+
+            # 폴더명과 버전 txt가 같은지 (PASS/FAIL)  
+            if item_list[0] != file_content:
+                # print("!!!!!!!! FAIL !!!!!!!!")
+                label=Label(self.frame, text="FAIL", fg="red").pack()
+            else :
+                # print("PASS")
+                label=Label(self.frame, text="PASS", fg="blue").pack()
 
         else:
             pass
@@ -1656,8 +1668,12 @@ class versionCheck:
                         # 확장자가 .zip인 파일은 리스트에 추가
                         zip_files.append(os.path.join(file))
 
+            split_str_new_list = []
             # ZIP 파일 목록 출력
             # print("critical = " + zip_files[0])
+            zip_split = str(zip_files[0]).split("-")
+            split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
+            split_str_new_list.append(split_str_new)
             label=Label(self.frame, text="critical = " + zip_files[0]).pack()
             
             # 파일 열기
@@ -1665,6 +1681,18 @@ class versionCheck:
                 file_content = file.read()
             # print("Version_txt = " + file_content)
             label=Label(self.frame, text="Version_txt = " + file_content).pack()
+
+            # 폴더명과 버전 txt가 같은지 (PASS/FAIL)
+            pass_list=[]
+
+            for i in range(0,len(split_str_new_list)):
+                if split_str_new_list[i] == file_content:
+                    pass_list.append("PASS")
+            
+            if "PASS" in pass_list :
+                label=Label(self.frame, text="PASS", fg="blue").pack()
+            else :
+                label=Label(self.frame, text="FAIL", fg="red").pack()
 
         else:
             pass
@@ -1681,15 +1709,43 @@ class versionCheck:
                         # 확장자가 .zip인 파일은 리스트에 추가
                         zip_files.append(os.path.join(file))
 
+            split_str_new_list = []
             # ZIP 파일 목록 출력
-            # print("diagnosis = " + zip_files[0])
-            label=Label(self.frame, text="diagnosis = " + zip_files[0]).pack()
+            if len(zip_files) >= 2:
+                for i in range(0,len(zip_files)):
+                    # print("Diagnosis = " + zip_files[i])
+                    label=Label(self.frame, text="diagnosis = " + zip_files[i]).pack()
+                    zip_split = zip_files[i].split("-")
+                    split_str_new = str(zip_files[i]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
+                    split_str_new_list.append(split_str_new)
+
+            elif len(zip_files) == 1:
+                # print("Diagnosis = " + zip_files[0])
+                label=Label(self.frame, text="diagnosis = " + zip_files[0]).pack()
+                zip_split = zip_files[0].split("-")
+                split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
+                split_str_new_list.append(split_str_new)
             
             # 파일 열기
             with open(file_path+diagnosis+diagnosis_txt, "r", encoding="utf-8") as file:
                 file_content = file.read()
             # print("diagnosis_version_txt = " + file_content)
             label=Label(self.frame, text="diagnosis_version_txt = " + file_content).pack()
+
+            # 폴더명과 버전 txt가 같은지 (PASS/FAIL)
+            pass_list=[]
+
+            for i in range(0,len(split_str_new_list)):
+                if split_str_new_list[i] == file_content:
+                    pass_list.append("PASS")
+            
+            if "PASS" in pass_list :
+                # print(pass_list)
+                # print("PASS")
+                label=Label(self.frame, text="PASS", fg="blue").pack()
+            else :
+                # print("!!!!!!!!! FAIL !!!!!!!!!")
+                label=Label(self.frame, text="FAIL", fg="red").pack()
 
         else:
             pass
@@ -1706,15 +1762,40 @@ class versionCheck:
                         # 확장자가 .zip인 파일은 리스트에 추가
                         zip_files.append(os.path.join(file))
 
+            split_str_new_list = []
             # ZIP 파일 목록 출력
-            # print("diagnosis_cv = " + zip_files[0])
-            label=Label(self.frame, text="diagnosis_cv = " + zip_files[0]).pack()
-            
+            if len(zip_files) >= 2:
+                for i in range(0,len(zip_files)):
+                    # print("Diagnosis_CV = " + zip_files[i])
+                    label=Label(self.frame, text="diagnosis_CV = " + zip_files[i]).pack()
+                    zip_split = zip_files[i].split("-")
+                    split_str_new = str(zip_files[i]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
+                    split_str_new_list.append(split_str_new)
+
+            elif len(zip_files) == 1:
+                # print("Diagnosis_CV = " + zip_files[0])
+                label=Label(self.frame, text="diagnosis_CV = " + zip_files[0]).pack()
+                zip_split = zip_files[0].split("-")
+                split_str_new = str(zip_files[0]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
+                split_str_new_list.append(split_str_new)
+
             # 파일 열기
             with open(file_path+diagnosis_cv+diagnosis_cv_txt, "r", encoding="utf-8") as file:
                 file_content = file.read()
-            print("Version_txt = " + file_content)
+            # print("Version_txt = " + file_content)
             label=Label(self.frame, text="Version_txt = " + file_content).pack()
+
+            # 폴더명과 버전 txt가 같은지 (PASS/FAIL)
+            pass_list=[]
+
+            for i in range(0,len(split_str_new_list)):
+                if split_str_new_list[i] == file_content:
+                    pass_list.append("PASS")
+            
+            if "PASS" in pass_list :
+                label=Label(self.frame, text="PASS", fg="blue").pack()
+            else :
+                label=Label(self.frame, text="FAIL", fg="red").pack()
 
         else:
             pass
@@ -1731,15 +1812,40 @@ class versionCheck:
                         # 확장자가 .zip인 파일은 리스트에 추가
                         zip_files.append(os.path.join(file))
 
+            split_str_new_list = []
             # ZIP 파일 목록 출력
-            # print("diagnosis_im = " + zip_files[0])
-            label=Label(self.frame, text="diagnosis_im = " + zip_files[0]).pack()
+            if len(zip_files) >= 2:
+                for i in range(0,len(zip_files)):
+                    # print("Diagnosis_CV = " + zip_files[i])
+                    label=Label(self.frame, text="diagnosis_im = " + zip_files[i]).pack()
+                    zip_split = zip_files[i].split("-")
+                    split_str_new = str(zip_files[i]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
+                    split_str_new_list.append(split_str_new)
+
+            elif len(zip_files) == 1:
+                # print("Diagnosis_CV = " + zip_files[0])
+                label=Label(self.frame, text="diagnosis_im = " + zip_files[0]).pack()
+                zip_split = zip_files[0].split("-")
+                split_str_new = str(zip_files[0]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
+                split_str_new_list.append(split_str_new)
             
             # 파일 열기
             with open(file_path+diagnosis_im+diagnosis_im_txt, "r", encoding="utf-8") as file:
                 file_content = file.read()
             # print("Version_txt = " + file_content)
             label=Label(self.frame, text="Version_txt = " + file_content).pack()
+
+            # 폴더명과 버전 txt가 같은지 (PASS/FAIL)
+            pass_list=[]
+
+            for i in range(0,len(split_str_new_list)):
+                if split_str_new_list[i] == file_content:
+                    pass_list.append("PASS")
+            
+            if "PASS" in pass_list :
+                label=Label(self.frame, text="PASS", fg="blue").pack()
+            else :
+                label=Label(self.frame, text="FAIL", fg="red").pack()
 
         else:
             pass
@@ -1756,15 +1862,40 @@ class versionCheck:
                         # 확장자가 .zip인 파일은 리스트에 추가
                         zip_files.append(os.path.join(file))
 
+            split_str_new_list = []
             # ZIP 파일 목록 출력
-            # print("os = " + zip_files[0])
-            label=Label(self.frame, text="os = " + zip_files[0]).pack()
+            if len(zip_files) >= 2:
+                for i in range(0,len(zip_files)):
+                    # print("Diagnosis_CV = " + zip_files[i])
+                    label=Label(self.frame, text="os = " + zip_files[i]).pack()
+                    zip_split = zip_files[i].split("-")
+                    split_str_new = str(zip_files[i]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
+                    split_str_new_list.append(split_str_new)
+
+            elif len(zip_files) == 1:
+                # print("Diagnosis_CV = " + zip_files[0])
+                label=Label(self.frame, text="os = " + zip_files[0]).pack()
+                zip_split = zip_files[0].split("-")
+                split_str_new = str(zip_files[0]).replace("-"+zip_split[-4]+"-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
+                split_str_new_list.append(split_str_new)
             
             # 파일 열기
             with open(file_path+gscan_os+gscan_os_txt, "r", encoding="utf-8") as file:
                 file_content = file.read()
             # print("os_version_txt = " + file_content)
             label=Label(self.frame, text="Version_txt = " + file_content).pack()
+            
+            # 폴더명과 버전 txt가 같은지 (PASS/FAIL)
+            pass_list=[]
+
+            for i in range(0,len(split_str_new_list)):
+                if split_str_new_list[i] == file_content:
+                    pass_list.append("PASS")
+            
+            if "PASS" in pass_list :
+                label=Label(self.frame, text="PASS", fg="blue").pack()
+            else :
+                label=Label(self.frame, text="FAIL", fg="red").pack()
             
         else:
             pass
@@ -1782,15 +1913,32 @@ class versionCheck:
                         # 확장자가 .zip인 파일은 리스트에 추가
                         zip_files.append(os.path.join(file))
 
+            split_str_new_list = []
             # ZIP 파일 목록 출력
             # print("system = " + zip_files[0])
             label=Label(self.frame, text="system = " + zip_files[0]).pack()
+            zip_split = zip_files[0].split("-")
+            split_str_new = str(zip_files[0]).replace("-"+zip_split[-3]+"-"+zip_split[-2]+"-"+zip_split[-1],'')
+            split_str_new_list.append(split_str_new)
 
             # 파일 열기
             with open(file_path+system+sys_txt, "r", encoding="utf-8") as file:
                 file_content = file.read()
             # print("system_version_txt = " + file_content)
             label=Label(self.frame, text="Version_txt = " + file_content).pack()
+
+            # 폴더명과 버전 txt가 같은지 (PASS/FAIL)
+            pass_list=[]
+
+            for i in range(0,len(split_str_new_list)):
+                if split_str_new_list[i] == file_content:
+                    pass_list.append("PASS")
+            
+            if "PASS" in pass_list :
+                label=Label(self.frame, text="PASS", fg="blue").pack()
+            else :
+                # print("!!!!!!!!! FAIL !!!!!!!!!")
+                label=Label(self.frame, text="FAIL", fg="red").pack()
 
         else:
             pass
@@ -1840,24 +1988,24 @@ class CompressApp:
         self.label_frame.pack(padx=10, pady=10, fill="x", expand=True)
 
         self.folder_path = tk.StringVar(value=self.config['DEFAULT'].get('folder_path', ''))
-        ttk.Label(self.label_frame, text="압축할 폴더:").pack(anchor='w')
+        ttk.Label(self.label_frame, text="압축할 폴더").pack(anchor='w')
         self.folder_entry = ttk.Entry(self.label_frame, textvariable=self.folder_path)
         self.folder_entry.pack(fill="x")
-        ttk.Button(self.label_frame, text="선택...", command=self.select_folder).pack(pady=5)
+        ttk.Button(self.label_frame, text="선택", command=self.select_folder).pack(pady=5)
 
         self.output_path = tk.StringVar(value=self.config['DEFAULT'].get('output_path', ''))
-        ttk.Label(self.label_frame, text="출력 경로:").pack(anchor='w')
+        ttk.Label(self.label_frame, text="출력 경로").pack(anchor='w')
         self.output_entry = ttk.Entry(self.label_frame, textvariable=self.output_path)
         self.output_entry.pack(fill="x")
-        ttk.Button(self.label_frame, text="선택...", command=self.select_output_folder).pack(pady=5)
+        ttk.Button(self.label_frame, text="선택", command=self.select_output_folder).pack(pady=5)
 
         self.max_size_mb = tk.StringVar(value=self.config['DEFAULT'].get('max_size_mb', ''))
-        ttk.Label(self.label_frame, text="최대 크기(MB):").pack(anchor='w')
+        ttk.Label(self.label_frame, text="최대 크기(MB)").pack(anchor='w')
         self.max_size_entry = ttk.Entry(self.label_frame, textvariable=self.max_size_mb)
         self.max_size_entry.pack(fill="x")
 
         self.file_name = tk.StringVar(value=self.config['DEFAULT'].get('file_name', ''))
-        ttk.Label(self.label_frame, text="압축 파일 이름:").pack(anchor='w')
+        ttk.Label(self.label_frame, text="압축 파일 이름").pack(anchor='w')
         self.file_name_entry = ttk.Entry(self.label_frame, textvariable=self.file_name)
         self.file_name_entry.pack(fill="x")
 
@@ -1981,10 +2129,14 @@ class CompressApp:
 
 class nullCheck:
     def __init__(self, window5):
+
+        self.config = configparser.ConfigParser()
+        self.config_file = 'settings.ini'
+        self.load_settings()
+
         # 화면 가운데 위치
-        window5.title("빈 파일 확인 프로그램")
-        # window.geometry("400x700")
-        window_width = 400
+        window5.title("빈폴더 확인 프로그램")
+        window_width = 500
         window_height = 500  # 높이 조정
         screen_width = window5.winfo_screenwidth()
         screen_height = window5.winfo_screenheight()
@@ -1996,42 +2148,20 @@ class nullCheck:
 
     def build_ui(self, window5):
         # 파일 경로 입력
-        label_title=tk.Label(window5, text="*** 빈 파일 확인 프로그램 입니다 ***", fg="green", relief="groove")
+        label_title = tk.Label(window5, text="*** 빈폴더 확인 프로그램 입니다 ***", fg="green", relief="groove")
         label_title.pack(fill='x', padx=5, pady=5)
 
         self.label_frame1 = ttk.LabelFrame(window5, text="설정")
         self.label_frame1.pack(padx=10, pady=10, fill="x", expand=True)
 
-        self.label1 = Label(self.label_frame1, text="프로젝트를 선택하세요")
-        self.label1.pack(anchor='w')
+        self.folder_path = tk.StringVar(value=self.config['DEFAULT'].get('folder_path', ''))
+        ttk.Label(self.label_frame1, text="확인할 폴더").pack(anchor='w')
+        self.folder_entry = ttk.Entry(self.label_frame1, width=50, textvariable=self.folder_path)
+        self.folder_entry.pack(fill="x")
+        ttk.Button(self.label_frame1, text="선택", command=self.select_folder).pack(pady=5)
 
-        # 항목값
-        self.selected_item = tk.StringVar(value='2')  # 기본값으로 4세대 선택
-        items = (('3세대 진단SW [GDSM]', '1'),
-                ('4세대 진단SW [GDSN]', '2'))
-
-        # 프로젝트 선택 라디오 버튼
-        for item in items:
-            r = ttk.Radiobutton(
-                self.label_frame1,
-                text=item[0],
-                value=item[1],
-                variable=self.selected_item,
-                command=self.update_rsc_folder
-            )
-            r.pack(padx=5, pady=5)
-
-        self.label2 = Label(self.label_frame1, text="파일 경로:")
-        self.label2.pack(anchor='w')
-
-        self.entry_filePath = ttk.Entry(self.label_frame1, width=50, justify="center")
-        self.entry_filePath.pack(padx=5, pady=5)
-
-        btn_Check = ttk.Button(self.label_frame1, text="Resource 빈 파일 확인", command=self.main_function)
+        btn_Check = ttk.Button(self.label_frame1, text="빈폴더 확인", command=self.main_func)
         btn_Check.pack(padx=5, pady=5)
-
-        # btn_delete = ttk.Button(label_frame1, text="압축 해제한 파일 삭제", command=delete_extracted_files)
-        # btn_delete.pack(fill='x', padx=5, pady=5)
 
         # 프레임
         self.frame = LabelFrame(self.label_frame1, text="결과")
@@ -2043,81 +2173,129 @@ class nullCheck:
         btn_cls = ttk.Button(self.label_frame1, text="초기화", command=self.clear_frame)
         btn_cls.pack(padx=5, pady=5)
 
-    # 폴더명 추출
-    zip_files = []
-    empty_folders = []
+    def select_folder(self):
+        folder_path = filedialog.askdirectory(title="확인할 폴더 선택", initialdir=self.folder_path.get())
+        if folder_path:
+            self.folder_path.set(folder_path)
 
     def clear_frame(self):
         for widgets in self.frame.winfo_children():
             widgets.destroy()
 
-    def update_rsc_folder(self):
-        global Rsc
-        if self.selected_item.get() == '1':
-            Rsc = Diagnosis
-        elif self.selected_item.get() == '2':
-            Rsc = Rsc
+    def main_func(self):
+        # 폴더명 추출
+        zip_files = []
+        file_path = self.folder_entry.get()
 
-    def rsc_fileList(self):
-        self.zip_files.clear()  # 리스트 초기화
-        file_path = self.entry_filePath.get()
         # 상위 디렉토리부터 모든 하위 디렉토리 및 파일을 탐색
-        for root, dirs, files in os.walk(file_path + Rsc):
+        for root, dirs, files in os.walk(file_path):
             for file in files:
                 if file.endswith('.zip'):
                     # 확장자가 .zip인 파일은 리스트에 추가
-                    self.zip_files.append(os.path.join(file))
-        return
+                    zip_files.append(os.path.join(file))
 
-    def fileCheck(self):
-        self.empty_folders.clear()  # 리스트 초기화
-        file_path = self.entry_filePath.get()
-        rsc_path = file_path + Rsc
-        for i in range(0, len(self.zip_files)):
-            zip_file_rep = self.zip_files[i].replace('.zip', '')
-            file_name = file_path + Rsc + "\\" + zip_file_rep
+        if len(zip_files) == 1:
+            for i in range(0, len(zip_files)):
+                zip_file_rep = zip_files[i].replace('.zip', '')
+                file_name = file_path + "\\" + zip_file_rep
 
-            # 압축 파일 해제
-            dirsList = []
-            for dirs in os.listdir(rsc_path):
-                dirsList.append(dirs)
-            if zip_file_rep not in dirsList:
-                os.makedirs(file_name, exist_ok=True)  # 폴더 생성
-                zipfile.ZipFile(file_path + Rsc + "\\" + self.zip_files[i]).extractall(file_path + Rsc + "\\" + zip_file_rep)
-            elif zip_file_rep in dirs:
-                shutil.rmtree(file_name)  # 폴더 전체 삭제
-                os.makedirs(file_name, exist_ok=True)  # 폴더 생성
-                zipfile.ZipFile(file_path + Rsc + "\\" + self.zip_files[i]).extractall(file_path + Rsc + "\\" + zip_file_rep)
+                # 압축 파일 해제
+                empty_folders = []
+                dirsList = []
+                
+                for dirs in os.listdir(file_path):
+                    dirsList.append(dirs)
+                if zip_file_rep not in dirsList:
+                    os.makedirs(file_name, exist_ok=True)  # 폴더 생성
+                    # zipfile 모듈에서 빈폴더를 파일로 인식한 경우 예외 처리
+                    with zipfile.ZipFile(file_path + "\\" + zip_files[i],'r') as zip_ref:
+                        for member in zip_ref.infolist():
+                            if (member.external_attr == 0x10) and (member.internal_attr ==1) and (member.file_size == 0):
+                                member_filename = member.filename.replace('/', '\\')
+                                empty_folders.append(file_path + "\\" + zip_file_rep + "\\" + member_filename)
+                    zipfile.ZipFile(file_path + "\\" + zip_files[i]).extractall(file_path + "\\" + zip_file_rep)
 
-            # 빈 파일 확인
-            for (root, dirs, files) in os.walk(file_name):
-                if not dirs:
-                    if not files:
-                        self.empty_folders.append(root)
+                elif zip_file_rep in dirs:
+                    shutil.rmtree(file_name)  # 폴더 전체 삭제
+                    os.makedirs(file_name, exist_ok=True)  # 폴더 생성
+                    zipfile.ZipFile(file_path + "\\" + zip_files[i]).extractall(file_path + "\\" + zip_file_rep)
 
-        if len(self.empty_folders) == 0:
-            label = Label(self.frame, text="빈 파일이 없습니다", fg="blue")
-            label.pack()
-        else:
-            for i in range(0, len(self.empty_folders)):
-                label = Label(self.frame, text=self.empty_folders[i] + " 파일을 확인하세요", fg="red", wraplength=400)
+                # 빈 파일 확인
+                for (root, dirs, files) in os.walk(file_name):
+                    if not dirs :
+                        if not files:
+                            empty_folders.append(root)
+
+            if len(empty_folders) == 0:
+                label = Label(self.frame, text="빈폴더가 없습니다", fg="blue")
                 label.pack()
+            else:
+                for i in range(0, len(empty_folders)):
+                    label = Label(self.frame, text=empty_folders[i] + " 폴더를 확인하세요", fg="red", wraplength=400)
+                    label.pack()
 
+            response = messagebox.askyesno("확인", "압축 해제한 파일을 삭제하시겠습니까?")
+            if response == 1:
+                for i in range(0, len(zip_files)):
+                    zip_file_rep = zip_files[i].replace('.zip', '')
+                    shutil.rmtree(file_path + "\\" + zip_file_rep)
+                messagebox.showinfo("알림", "압축 해제한 파일이 성공적으로 삭제되었습니다.")
+            else:
+                messagebox.showinfo("알림", "파일 삭제가 취소되었습니다.")
 
-        file_path = self.entry_filePath.get()
-        response = messagebox.askyesno("확인", "압축 해제한 파일을 삭제하시겠습니까?")
-        if response == 1:  # 사용자가 '확인'을 클릭한 경우
-            for i in range(0, len(self.zip_files)):
-                zip_file_rep = self.zip_files[i].replace('.zip', '')
-                shutil.rmtree(file_path + Rsc + "\\" + zip_file_rep)
-            messagebox.showinfo("알림", "압축 해제한 파일이 성공적으로 삭제되었습니다.")
-        else:
-            messagebox.showinfo("알림", "파일 삭제가 취소되었습니다.")
+        elif len(zip_files) >= 2:
+            zip_file_rep = []
+            empty_folders = []
+            dirsList = []
+            for i in range(0, len(zip_files)):
+                zip_file_rep.append(zip_files[i].replace('.zip', ''))
+                file_name = file_path + "\\" + zip_file_rep[i]
 
+                # 압축 파일 해제
+                for dirs in os.listdir(file_path):
+                    dirsList.append(dirs)
+                if zip_file_rep[i] not in dirsList:
+                    os.makedirs(file_name, exist_ok=True)  # 폴더 생성
+                    # zipfile 모듈에서 빈폴더를 파일로 인식한 경우 예외 처리
+                    with zipfile.ZipFile(file_path + "\\" + zip_files[i],'r') as zip_ref:
+                        for member in zip_ref.infolist():
+                            if (member.external_attr == 0x10) and (member.internal_attr == 1) and (member.file_size == 0):
+                                member_filename = member.filename.replace('/', '\\')
+                                empty_folders.append(file_name + "\\" + member_filename)
+                    zipfile.ZipFile(file_path + "\\" + zip_files[i]).extractall(file_name)
+                    # 빈 파일 확인
+                    for (root, dirs, files) in os.walk(file_path + "\\" + zip_file_rep[i]):
+                        if not dirs :
+                            if not files:
+                                empty_folders.append(root)
 
-    def main_function(self):
-        self.rsc_fileList()  # 리소스 파일 리스트
-        self.fileCheck()  # 파일 확인
+                elif zip_file_rep[i] in dirs:
+                    shutil.rmtree(file_name)  # 폴더 전체 삭제
+                    os.makedirs(file_name, exist_ok=True)  # 폴더 생성
+                    zipfile.ZipFile(file_path + "\\" + zip_files[i]).extractall(file_name)
+
+            if len(empty_folders) == 0:
+                label = Label(self.frame, text="빈폴더가 없습니다", fg="blue")
+                label.pack()
+            else:
+                for i in range(0, len(empty_folders)):
+                    label = Label(self.frame, text=empty_folders[i] + " 폴더를 확인하세요", fg="red", wraplength=400)
+                    label.pack()
+
+            response = messagebox.askyesno("확인", "압축 해제한 파일을 삭제하시겠습니까?")
+            if response == 1:
+                zip_file_rep = []
+                for i in range(0, len(zip_files)):
+                    zip_file_rep.append(zip_files[i].replace('.zip', ''))
+                    file_name = file_path + "\\" + zip_file_rep[i]
+                    shutil.rmtree(file_name)
+                messagebox.showinfo("알림", "압축 해제한 파일이 성공적으로 삭제되었습니다.")
+            else:
+                messagebox.showinfo("알림", "파일 삭제가 취소되었습니다.")
+
+    def load_settings(self):
+        self.config.read(self.config_file)
+
 
 class rscCheck:
 
@@ -2331,6 +2509,193 @@ class rscCheck:
     def clear_frame(self):
         for widgets in self.frame.winfo_children():
             widgets.destroy()
+
+class handOperateApp:
+    def __init__(self, window9):
+        self.root = window9  # root를 인스턴스 변수로 저장
+        self.config = configparser.ConfigParser()
+        self.config_file = 'settings.ini'
+        self.load_settings()
+
+        window9.title("수동 취합 프로그램")
+        window9.geometry("400x500")  # 높이 조정
+
+        # 화면 가운데 위치
+        window_width = 400
+        window_height = 500  # 높이 조정
+        screen_width = window9.winfo_screenwidth()
+        screen_height = window9.winfo_screenheight()
+        center_x = int(screen_width / 2 - window_width / 2)
+        center_y = int(screen_height / 2 - window_height / 2)
+        window9.geometry(f"{window_width}x{window_height}+{center_x}+{center_y}")
+
+        self.build_ui(window9)
+        # window9.protocol("WM_DELETE_WINDOW", self.on_closing)
+
+    def build_ui(self, window9):
+        self.label_frame = ttk.LabelFrame(window9, text="설정")
+        self.label_frame.pack(padx=10, pady=10, fill="x", expand=True)
+
+        self.folder_path = tk.StringVar(value=self.config['DEFAULT'].get('folder_path', ''))
+        ttk.Label(self.label_frame, text="수동 취합할 폴더").pack(anchor='w')
+        self.folder_entry = ttk.Entry(self.label_frame, textvariable=self.folder_path)
+        self.folder_entry.pack(fill="x")
+        ttk.Button(self.label_frame, text="선택", command=self.select_folder).pack(pady=5)
+
+        self.output_path = tk.StringVar(value=self.config['DEFAULT'].get('output_path', ''))
+        ttk.Label(self.label_frame, text="출력 경로").pack(anchor='w')
+        self.output_entry = ttk.Entry(self.label_frame, textvariable=self.output_path)
+        self.output_entry.pack(fill="x")
+        ttk.Button(self.label_frame, text="선택", command=self.select_output_folder).pack(pady=5)
+
+        self.file_name = tk.StringVar(value=self.config['DEFAULT'].get('file_name', ''))
+        ttk.Label(self.label_frame, text="압축 파일 이름").pack(anchor='w')
+        self.file_name_entry = ttk.Entry(self.label_frame, textvariable=self.file_name)
+        self.file_name_entry.pack(fill="x")
+
+        self.progress_var = tk.DoubleVar()
+        self.progress_bar = ttk.Progressbar(window9, variable=self.progress_var, maximum=100)
+        self.progress_bar.pack(padx=10, pady=10, fill="x")
+
+        ttk.Button(window9, text="수동 취합 시작", command=self.start_handOperate).pack(pady=20)
+
+    def select_folder(self):
+        folder_path = filedialog.askdirectory(title="수동 취합할 폴더 선택", initialdir=self.folder_path.get())
+        if folder_path:
+            self.folder_path.set(folder_path)
+
+    def select_output_folder(self):
+        output_path = filedialog.askdirectory(title="출력 경로 선택", initialdir=self.output_path.get())
+        if output_path:
+            self.output_path.set(output_path)
+
+    def update_progress(self, processed, total):
+        progress = (processed / total) * 100
+        self.progress_var.set(progress)
+        self.window9.update_idletasks()  # root 대신 self.root 사용
+
+    def handOperate_folder(self, folder_path, output_path, file_name):
+        # 변수 선언
+        sqlitedb = "/systemdb/system"
+        auxFunc = "/AuxFunction"
+        # binroot = "/BIN"
+
+        sqlitedbList = ['ECU_mapping.sqlite', 'SoftwareInformation.sqlite', 'SpecialFunction.sqlite', 'GDSN_AUXmultilanguage.sqlite', 'GDSNmultilanguage.sqlite', 'GDSMultilanguage_CV.sqlite']
+        auxFuncList = ['ECUMapping.git', 'ECUMapping.gwm']
+        # binrootList = ['VCI1', 'VCI2', 'VCI2W', 'VMI1', 'TPMS', 'TPMS_NEW']
+
+        dirList = []
+        fileList_sqlitedb_all = []
+        fileList_auxFunc_all = []
+        fileList_sqlitedb = []
+        fileList_auxFunc = []
+        fileList_TF = []
+
+        # 원본 폴더 복사
+        src1 = folder_path
+        dst1 = output_path+'/Resource'
+        shutil.copytree(src1, dst1)
+
+        for (root, dirs, files) in os.walk(folder_path):
+            dirList.append(dirs)
+        # print(dirList)
+
+        # SYSTEM
+        # sqlite
+        if "systemdb" in dirList[0]:
+            for (root, dirs, files) in os.walk(folder_path+sqlitedb):
+                fileList_sqlitedb_all.append(files)
+            for i in range(0, len(fileList_sqlitedb_all[0])):
+                if fileList_sqlitedb_all[0][i] in sqlitedbList :
+                    fileList_TF.append('True')
+                    fileList_sqlitedb.append(fileList_sqlitedb_all[0][i])
+            # print(fileList_sqlitedb)
+            if 'True' in fileList_TF:
+                os.makedirs(output_path+'/Resource'+'/system/'+sqlitedb)
+
+            for i in range(0, len(fileList_sqlitedb)):
+                src2 = dst1+'/'+sqlitedb+'/'+fileList_sqlitedb[i]
+                dst2 = output_path+'/Resource'+'/system/'+sqlitedb
+                shutil.move(src2, dst2)
+            # 빈파일 삭제
+            for (root, dirs, files) in os.walk(output_path+'/Resource/'+sqlitedb):
+                if not dirs:
+                    if not files:
+                        shutil.rmtree(output_path+'/Resource/'+sqlitedb)
+        else :
+            pass
+        # AuxFunction
+        if "AuxFunction" in dirList[0]:
+            for (root, dirs, files) in os.walk(folder_path+auxFunc):
+                fileList_auxFunc_all.append(files)
+            # print(fileList_auxFunc_all[0])
+            for i in range(0, len(fileList_auxFunc_all[0])):
+                if fileList_auxFunc_all[0][i] in auxFuncList :
+                    os.makedirs(output_path+'/Resource'+'/system/'+auxFunc)
+                    fileList_auxFunc.append(fileList_auxFunc_all[0][i])
+
+            for i in range(0, len(fileList_auxFunc)):
+                src3 = dst1+'/'+auxFunc+'/'+fileList_auxFunc[i]
+                dst3 = output_path+'/Resource'+'/system/'+auxFunc
+                shutil.move(src3, dst3)
+            # 빈파일 삭제
+            for (root, dirs, files) in os.walk(output_path+'/Resource/'+auxFunc):
+                if not dirs:
+                    if not files:
+                        shutil.rmtree(output_path+'/Resource/'+auxFunc)
+        else :
+            pass
+
+        # RESOURCE
+        # os.makedirs(output_path+'/Resource/')
+        os.makedirs(output_path+'/'+file_name)
+        src4 = dst1
+        dst4 = output_path+'/'+file_name
+        shutil.move(src4, dst4)
+        shutil.move(dst4+'/Resource'+'/system', dst4)
+
+        self.root.after(0, self.reset_ui)  # Ensure UI reset is called in the main thread
+
+    def reset_ui(self):
+        # Reset UI elements to be editable after compression is complete
+        self.folder_entry.config(state='normal')
+        self.output_entry.config(state='normal')
+        # self.max_size_entry.config(state='normal')
+        self.file_name_entry.config(state='normal')
+        messagebox.showinfo("압축 완료", "수동 취합이 완료되었습니다.")
+        self.progress_var.set(0)  # Reset progress bar
+
+    def start_handOperate(self):
+        # 입력 필드 수정 불가능하게 설정
+        self.folder_entry.config(state='disabled')
+        self.output_entry.config(state='disabled')
+        # self.max_size_entry.config(state='disabled')
+        self.file_name_entry.config(state='disabled')
+
+        # 작업 시작
+        folder_path = self.folder_path.get()
+        output_path = self.output_path.get()
+        file_name = self.file_name.get()
+
+        threading.Thread(target=self.handOperate_folder, args=(folder_path, output_path, file_name),
+                         daemon=True).start()
+
+    def load_settings(self):
+        self.config.read(self.config_file)
+
+    def save_settings(self):
+        self.config['DEFAULT'] = {
+            'folder_path': self.folder_path.get(),
+            'output_path': self.output_path.get(),
+            # 'max_size_mb': self.max_size_mb.get(),
+            'file_name': self.file_name.get(),
+        }
+        with open(self.config_file, 'w') as configfile:
+            self.config.write(configfile)
+
+    def on_closing(self):
+        self.save_settings()
+        self.window9.destroy()
 
 class korea:
 
@@ -3477,6 +3842,11 @@ def createNewWindow8():
     app = rscCheck(window8)
     window8.mainloop()
 
+def createNewWindow9():
+    window9 = tk.Toplevel(mainWindow)
+    app = handOperateApp(window9)
+    window9.mainloop()
+
 #-- 업데이트 문서 --
 def createNewWindow6():
     window6 = tk.Toplevel(mainWindow)
@@ -3494,7 +3864,7 @@ mainWindow.title("AutomationTool")
 
 # 화면 비율
 window_width = 300
-window_height = 400  # 높이 조정
+window_height = 480  # 높이 조정
 screen_width = mainWindow.winfo_screenwidth()
 screen_height = mainWindow.winfo_screenheight()
 center_x = int(screen_width / 2 - window_width / 2)
@@ -3504,7 +3874,7 @@ mainWindow.geometry(f"{window_width}x{window_height}+{center_x}+{center_y}")
 label_frame = ttk.LabelFrame(mainWindow, text="프로그램")
 label_frame.pack(padx=10, pady=10, fill="x", expand=True)
 
-label_frame2 = ttk.LabelFrame(mainWindow, text="업데이트 문서")
+label_frame2 = ttk.LabelFrame(mainWindow, text="업데이트 내역서")
 label_frame2.pack(padx=10, pady=10, fill="x", expand=True)
 
 # 버튼
@@ -3517,12 +3887,15 @@ button3 = ttk.Button(label_frame, text="파일 버전 확인 프로그램", comm
 button3.pack(padx=7, pady=7)
 button4 = ttk.Button(label_frame, text="자동 분할 압축 프로그램", command=createNewWindow4)
 button4.pack(padx=7, pady=7)
-button5 = ttk.Button(label_frame, text="빈 파일 확인 프로그램", command=createNewWindow5)
+button5 = ttk.Button(label_frame, text="빈폴더 확인 프로그램", command=createNewWindow5)
 button5.pack(padx=7, pady=7)
 button8 = ttk.Button(label_frame, text="수동 취합 검증 프로그램", command=createNewWindow8)
 button8.pack(padx=7, pady=7)
+button9 = ttk.Button(label_frame, text="수동 취합용 자동 프로그램", command=createNewWindow9)
+button9.pack(padx=7, pady=7)
+
 # -- label_frame2
-button6 = ttk.Button(label_frame2, text="한국", command=createNewWindow6)
+button6 = ttk.Button(label_frame2, text="국내", command=createNewWindow6)
 button6.pack(padx=7, pady=7)
 button7 = ttk.Button(label_frame2, text="해외", command=createNewWindow7)
 button7.pack(padx=7, pady=7)
