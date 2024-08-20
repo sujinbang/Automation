@@ -2575,7 +2575,8 @@ class handOperateApp:
         self.window9.update_idletasks()  # root 대신 self.root 사용
 
     def handOperate_folder(self, folder_path, output_path, file_name):
-        # 변수 선언
+
+        # -- 변수 선언 --
         sqlitedb = "/systemdb/system"
         auxFunc = "/AuxFunction"
         # binroot = "/BIN"
@@ -2591,78 +2592,97 @@ class handOperateApp:
         fileList_auxFunc = []
         fileList_TF = []
 
-        # 원본 폴더 복사
-        src1 = folder_path
-        dst1 = output_path+'/Resource'
-        shutil.copytree(src1, dst1)
-
+        # -- 폴더 경로 탐색 --
         for (root, dirs, files) in os.walk(folder_path):
             dirList.append(dirs)
-        # print(dirList)
 
-        # SYSTEM
-        # sqlite
-        if "systemdb" in dirList[0]:
-            for (root, dirs, files) in os.walk(folder_path+sqlitedb):
-                fileList_sqlitedb_all.append(files)
-            for i in range(0, len(fileList_sqlitedb_all[0])):
-                if fileList_sqlitedb_all[0][i] in sqlitedbList :
-                    fileList_TF.append('True')
-                    fileList_sqlitedb.append(fileList_sqlitedb_all[0][i])
-            # print(fileList_sqlitedb)
-            if 'True' in fileList_TF:
-                os.makedirs(output_path+'/Resource'+'/system/'+sqlitedb)
+        # -- 결과 폴더 생성 --
+        try :
+            os.makedirs(output_path+'/'+file_name, exist_ok=False)
 
-            for i in range(0, len(fileList_sqlitedb)):
-                src2 = dst1+'/'+sqlitedb+'/'+fileList_sqlitedb[i]
-                dst2 = output_path+'/Resource'+'/system/'+sqlitedb
-                shutil.move(src2, dst2)
-            # 빈파일 삭제
-            for (root, dirs, files) in os.walk(output_path+'/Resource/'+sqlitedb):
-                if not dirs:
-                    if not files:
-                        shutil.rmtree(output_path+'/Resource/'+sqlitedb)
-        else :
-            pass
-        # AuxFunction
-        if "AuxFunction" in dirList[0]:
-            for (root, dirs, files) in os.walk(folder_path+auxFunc):
-                fileList_auxFunc_all.append(files)
-            # print(fileList_auxFunc_all[0])
-            for i in range(0, len(fileList_auxFunc_all[0])):
-                if fileList_auxFunc_all[0][i] in auxFuncList :
-                    os.makedirs(output_path+'/Resource'+'/system/'+auxFunc)
-                    fileList_auxFunc.append(fileList_auxFunc_all[0][i])
+            if len(dirList[0]) > 0 :
+                # -- 원본 폴더 복사 --
+                src1 = folder_path
+                dst1 = output_path+'/Resource'
+                shutil.copytree(src1, dst1)
 
-            for i in range(0, len(fileList_auxFunc)):
-                src3 = dst1+'/'+auxFunc+'/'+fileList_auxFunc[i]
-                dst3 = output_path+'/Resource'+'/system/'+auxFunc
-                shutil.move(src3, dst3)
-            # 빈파일 삭제
-            for (root, dirs, files) in os.walk(output_path+'/Resource/'+auxFunc):
-                if not dirs:
-                    if not files:
-                        shutil.rmtree(output_path+'/Resource/'+auxFunc)
-        else :
-            pass
+                # -- sqlite --
+                if "systemdb" in dirList[0]:
+                    for (root, dirs, files) in os.walk(folder_path+sqlitedb):
+                        fileList_sqlitedb_all.append(files)
+                    for i in range(0, len(fileList_sqlitedb_all[0])):
+                        if fileList_sqlitedb_all[0][i] in sqlitedbList :
+                            fileList_TF.append('True')
+                            fileList_sqlitedb.append(fileList_sqlitedb_all[0][i])
+                    # print(fileList_sqlitedb)
+                    if 'True' in fileList_TF:
+                        os.makedirs(output_path+'/Resource'+'/system/'+sqlitedb)
 
-        # RESOURCE
-        # os.makedirs(output_path+'/Resource/')
-        os.makedirs(output_path+'/'+file_name)
-        src4 = dst1
-        dst4 = output_path+'/'+file_name
-        shutil.move(src4, dst4)
-        shutil.move(dst4+'/Resource'+'/system', dst4)
+                    for i in range(0, len(fileList_sqlitedb)):
+                        src2 = dst1+'/'+sqlitedb+'/'+fileList_sqlitedb[i]
+                        dst2 = output_path+'/Resource'+'/system/'+sqlitedb
+                        shutil.move(src2, dst2)
+                    # 빈파일 삭제
+                    for (root, dirs, files) in os.walk(output_path+'/Resource/'+sqlitedb):
+                        if not dirs and not files:
+                                shutil.rmtree(output_path+'/Resource/'+sqlitedb)
+                else :
+                    pass
+                # -- AuxFunction --
+                if "AuxFunction" in dirList[0]:
+                    for (root, dirs, files) in os.walk(folder_path+auxFunc):
+                        fileList_auxFunc_all.append(files)
+                    # print(fileList_auxFunc_all[0])
+                    for i in range(0, len(fileList_auxFunc_all[0])):
+                        if fileList_auxFunc_all[0][i] in auxFuncList :
+                            os.makedirs(output_path+'/Resource'+'/system/'+auxFunc)
+                            fileList_auxFunc.append(fileList_auxFunc_all[0][i])
 
-        self.root.after(0, self.reset_ui)  # Ensure UI reset is called in the main thread
+                    for i in range(0, len(fileList_auxFunc)):
+                        src3 = dst1+'/'+auxFunc+'/'+fileList_auxFunc[i]
+                        dst3 = output_path+'/Resource'+'/system/'+auxFunc
+                        shutil.move(src3, dst3)
+                    # 빈파일 삭제
+                    for (root, dirs, files) in os.walk(output_path+'/Resource/'+auxFunc):
+                        if not dirs:
+                            if not files:
+                                shutil.rmtree(output_path+'/Resource/'+auxFunc)
+                else :
+                    pass
+
+                src4 = dst1 # 원본 폴더 복사
+                dst4 = output_path+'/'+file_name
+                shutil.move(src4, dst4)
+                shutil.move(dst4+'/Resource'+'/system', dst4)
+
+                # 빈파일 삭제
+                for (root, dirs, files) in os.walk(output_path+'/'+file_name+'/Resource'):
+                    if not dirs:
+                        if not files:
+                            shutil.rmtree(output_path+'/'+file_name+'/Resource')
+
+                for (root, dirs, files) in os.walk(output_path+'/'+file_name+'/system'):
+                    if not dirs:
+                        if not files:
+                            shutil.rmtree(output_path+'/'+file_name+'/system')
+
+                messagebox.showinfo("압축 완료", "수동 취합이 완료되었습니다.")
+                self.root.after(0, self.reset_ui)  # Ensure UI reset is called in the main thread
+
+            else :
+                messagebox.showerror("오류", "nvci 파일 경로가 맞는지 확인하세요")
+                self.root.after(0, self.reset_ui)
+
+        except FileExistsError:
+            messagebox.showerror("오류", "이미 존재하는 폴더입니다.")
+            self.root.after(0, self.reset_ui)
 
     def reset_ui(self):
         # Reset UI elements to be editable after compression is complete
         self.folder_entry.config(state='normal')
         self.output_entry.config(state='normal')
-        # self.max_size_entry.config(state='normal')
         self.file_name_entry.config(state='normal')
-        messagebox.showinfo("압축 완료", "수동 취합이 완료되었습니다.")
+        # messagebox.showinfo("압축 완료", "수동 취합이 완료되었습니다.")
         self.progress_var.set(0)  # Reset progress bar
 
     def start_handOperate(self):
